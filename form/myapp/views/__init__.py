@@ -1,0 +1,1 @@
+from .stu_personal import Student_personal_info
