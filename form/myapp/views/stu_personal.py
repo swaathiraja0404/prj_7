@@ -5,5 +5,12 @@ from ..forms import Personal
 from ..models import MyappStudent
 
 def Student_personal_info(request):
-    form = Personal()
-    return render(request,'students/personal.html',{'form':form})    
+    if request.method=="POST":
+        form = Personal(request.POST,request.FILES)
+
+        if form.is_valid():
+            form.save()
+            return redirect("info")
+    else:
+        form = Personal()
+    return render(request,'students/personal.html',{'form':form})     
