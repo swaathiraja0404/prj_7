@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #dbeafe, #f5d0fe);
+            min-height: 100vh;
+            padding: 40px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #312e81;
+            margin-bottom: 25px;
+        }
+
+         /* .profile-card {
+            background: white;
+            padding: 50px;
+            border-radius: 50px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            width: 900px;
+        } */
+            .profile-card {
+            background: white;
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+
+            width: 600px;          
+            margin: 0 auto;
+        }
+        
+
+        .info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        .info-box {
+            padding: 15px;
+            background: #f8fafc;
+            border-left: 3px solid #6366f1;
+            border-radius: 10px;
+            width: 100%;
+        }
+
+        .submit-btn {
+            margin-top: 20px;
+            padding: 12px 30px;
+            background: #6366f1;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .submit-btn:hover {
+            background: #4f46e5;
+        }
+
+        @media (max-width: 600px) {
+            .info {
+                grid-template-columns: 1fr;
+            }
+
+            body {
+                padding: 20px;
+            }
+        .info label {
+            font-weight: bold;
+            color: #312e81;
+            display: block;
+            margin-bottom: 6px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Staff Personal Information</h1>
+
+    <div class="profile-card">
+
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="info">
+                <!-- {{ form.as_p }} -->
+                    <label>Name:</label><br>
+                    {{ form.name }}
+                    <br><br>
+
+                    <label>Age:</label><br>
+                    {{ form.age }}
+                    <br><br>
+
+                    <label>Date Of Birth:</label><br>
+                    {{ form.dob }}
+                    <br><br>
+
+                    <label>Phone:</label><br>
+                    {{ form.phone }}
+                    <br><br>
+
+                    <label>Email:</label><br>
+                    {{ form.email }}
+                    <br><br>
+                    <label>Department:</label><br>
+                    {{ form.department }}
+                    <br><br>
+
+            </div>
+
+            <button type="submit" class="submit-btn">
+                Submit
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+</body>
+</html>

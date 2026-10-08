@@ -10,7 +10,7 @@ def Student_personal_info(request):
 
         if form.is_valid():
             form.save()
-            return redirect("info")
+            return redirect("Student_personal_info")
     else:
         form = Personal()
     return render(request,'students/personal.html',{'form':form})     
