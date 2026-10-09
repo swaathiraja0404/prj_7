@@ -94,39 +94,35 @@
 
 <div class="container">
 
-    <h1>Staff Personal Information</h1>
+    <h1>Student Personal Information</h1>
 
     <div class="profile-card">
 
         <form method="post">
             {% csrf_token %}
 
+
             <div class="info">
-                <!-- {{ form.as_p }} -->
-                    <label>Name:</label><br>
-                    {{ form.name }}
-                    <br><br>
 
-                    <label>Age:</label><br>
-                    {{ form.age }}
-                    <br><br>
+                <label>User ID:</label><br>
+                {{ form.user_id }}
+                <br><br>
 
-                    <label>Date Of Birth:</label><br>
-                    {{ form.dod }}
-                    <br><br>
+                <label>Role:</label><br>
+                {{ form.role }}
+                <br><br>
 
-                    <label>Phone:</label><br>
-                    {{ form.phone }}
-                    <br><br>
+                <label>Username:</label><br>
+                {{ form.username }}
+                <br><br>
 
-                    <label>Email:</label><br>
-                    {{ form.email }}
-                    <br><br>
-                    <label>Department:</label><br>
-                    {{ form.department }}
-                    <br><br>
+                <label>Password:</label><br>
+                {{ form.password }}
+                <br><br>
 
             </div>
+
+
 
             <button type="submit" class="submit-btn">
                 Submit

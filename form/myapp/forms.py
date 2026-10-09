@@ -1,9 +1,9 @@
 from django import forms
-from .models import MyappStudent,MyappStaff
+from .models import MyappStudent,MyappStaff,Department,UserAuth
 class Personal(forms.ModelForm):
         class Meta:
             model=MyappStudent
-            fields = ['name','age','dob','phone','email']
+            fields = ['name','age','dod','phone','email']
         
         name = forms.CharField(max_length=100,
         widget=forms.TextInput(attrs=
@@ -21,7 +21,7 @@ class Personal(forms.ModelForm):
         }
         ))
         
-        dob = forms.DateField(    widget=forms.TextInput(attrs=
+        dod = forms.DateField(    widget=forms.TextInput(attrs=
         {
             "class":"info-box",
             "type": "date"
@@ -47,7 +47,7 @@ class Personal(forms.ModelForm):
 class StaffPersonal(forms.ModelForm):
             class Meta:
                 model=MyappStaff
-                fields = ['name','age','dob','phone','email','department']
+                fields = ['name','age','dod','phone','email','department']
         
             name = forms.CharField(max_length=100,
             widget=forms.TextInput(attrs=
@@ -65,7 +65,7 @@ class StaffPersonal(forms.ModelForm):
             }
             ))
             
-            dob = forms.DateField(    widget=forms.TextInput(attrs=
+            dod = forms.DateField(    widget=forms.TextInput(attrs=
             {
                 "class":"info-box",
                 "type": "date"
@@ -88,15 +88,49 @@ class StaffPersonal(forms.ModelForm):
             }
             ))
             
-            department = forms.ChoiceField(choices=[
-                    ('', 'Select Department'),
-                    ('IT', '1. IT'),
-                    ('CSE', '2. CSE'),
-                    ('EEE', '3. EEE'),
-                    ('AIDS', '4. AIDS'),
-                    ('CIVIL', '5. CIVIL'),
-                ],
+            department = forms.ModelChoiceField(
+                queryset=Department.objects.all(),
+                empty_label="Select Department",
+                widget=forms.Select(attrs={
+                    "class": "info-box"
+                })
+            )
+
+class LoginForm(forms.Form):
+            class Meta:
+                    model=MyappStaff
+                    fields = ['username','role']
+
+            ROLE_CHOICES = [
+                ('', 'Select Role'),
+                ('Student', 'Student'),
+                ('Staff', 'Staff'),
+            ]
+
+            role = forms.ChoiceField(
+                choices=ROLE_CHOICES,
                 widget=forms.Select(attrs={
                     'class': 'info-box'
                 })
             )
+            user_id = forms.IntegerField(
+                widget=forms.NumberInput(attrs={
+                    'class': 'info-box', 
+                    'placeholder': 'Enter your User ID' 
+                }) 
+            )
+            username = forms.CharField(
+                max_length=254,
+                widget=forms.TextInput(attrs={
+                    'class': 'info-box',
+                    'placeholder': 'Enter your username or email'
+                })
+            )
+
+            password = forms.CharField(
+                widget=forms.PasswordInput(attrs={
+                    'class': 'info-box',
+                    'placeholder': 'Enter your password'
+                })
+            )
+
