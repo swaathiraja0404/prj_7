@@ -45,6 +45,13 @@ class Personal(forms.ModelForm):
         ))
 
 class StaffPersonal(forms.ModelForm):
+            password = forms.CharField(
+                widget=forms.PasswordInput(attrs={
+                    "class": "info-box",
+                    "placeholder": "Enter your password"
+                })
+            )
+
             class Meta:
                 model=MyappStaff
                 fields = ['name','age','dod','phone','email','department']
@@ -88,9 +95,7 @@ class StaffPersonal(forms.ModelForm):
             }
             ))
             
-            department = forms.ModelChoiceField(
-                queryset=Department.objects.all(),
-                empty_label="Select Department",
+            department = forms.ModelChoiceField(queryset=Department.objects.all(),empty_label="Select Department",
                 widget=forms.Select(attrs={
                     "class": "info-box"
                 })

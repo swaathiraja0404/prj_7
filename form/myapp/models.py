@@ -11,6 +11,9 @@ class MyappStudent(models.Model):
     class Meta:
         db_table = 'myapp_student'
 
+    def __str__(self):
+        return self.name
+
 class MyappStaff(models.Model):
     id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=100)
@@ -26,6 +29,11 @@ class MyappStaff(models.Model):
 class Department(models.Model):
     id = models.BigAutoField(primary_key=True)
     dept_name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.dept_name
+
+
 
 class UserAuth(models.Model):
     id = models.AutoField(primary_key=True)

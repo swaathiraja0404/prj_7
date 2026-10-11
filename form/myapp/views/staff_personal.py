@@ -2,7 +2,7 @@ from django .views import View
 from django .shortcuts import render,redirect
 from django.http import HttpResponse
 from ..forms import StaffPersonal
-from ..models import MyappStaff
+from ..models import MyappStaff,UserAuth
 from django.db import transaction
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password
@@ -20,11 +20,11 @@ def staff_personal_info(request):
                 with transaction.atomic():
 
                  
-                    form.save()
-
+                    staff = form.save()
                     
                     UserAuth.objects.create(
-                        username=username,
+                        user_id=staff.id,
+                        username=staff.email,
                         password=make_password(raw_password),
                         role='Staff'
                     )
