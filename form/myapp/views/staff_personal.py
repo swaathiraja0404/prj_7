@@ -14,7 +14,7 @@ def staff_personal_info(request):
 
         if form.is_valid():
             username = form.cleaned_data['email']
-            raw_password = form.cleaned_data['password']
+            raw_password = form.cleaned_data['phone']
 
             try:
                 with transaction.atomic():
@@ -25,7 +25,7 @@ def staff_personal_info(request):
                     UserAuth.objects.create(
                         user_id=staff.id,
                         username=staff.email,
-                        password=make_password(raw_password),
+                        password=make_password(staff.phone),
                         role='Staff'
                     )
 
