@@ -7,6 +7,7 @@ class MyappStudent(models.Model):
     dod = models.DateField(null=True)
     phone=models.CharField(max_length=10,null=True)
     email = models.CharField(unique=True, max_length=254)
+    department = models.CharField(max_length=100,null=True)
     
     class Meta:
         db_table = 'myapp_student'

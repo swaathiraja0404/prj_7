@@ -102,7 +102,7 @@
             {% csrf_token %}
 
             <div class="info">
-                <!-- {{ form.as_p }} -->
+            
                     <label>Name:</label><br>
                     {{ form.name }}
                     <br><br>
@@ -121,6 +121,9 @@
 
                     <label>Email:</label><br>
                     {{ form.email }}
+                    <br><br>
+                    <label>Department:</label><br>
+                    {{ form.department }}
                     <br><br>
             </div>
 

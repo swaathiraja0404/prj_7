@@ -1,0 +1,98 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Staff Dashboard</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #dbeafe, #f5d0fe);
+            margin: 0;
+            padding: 40px 20px;
+        }
+
+        .dashboard {
+            max-width: 800px;
+            margin: auto;
+        }
+
+        h1 {
+            color: #1e293b;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .card h2 {
+            color: #2563eb;
+        }
+
+        .detail {
+            margin: 15px 0;
+            font-size: 17px;
+        }
+
+        .total {
+            font-size: 40px;
+            font-weight: bold;
+            color: #2563eb;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="dashboard">
+
+    <h1>Staff Dashboard</h1>
+
+    <div class="card">
+        <h2>Welcome, {{ staff.name }}!</h2>
+
+        <div class="detail">
+            <strong>Staff ID:</strong> {{ staff.id }}
+        </div>
+
+        <div class="detail">
+            <strong>Name:</strong> {{ staff.name }}
+        </div>
+
+        <div class="detail">
+            <strong>Email:</strong> {{ staff.email }}
+        </div>
+
+        <div class="detail">
+            <strong>Phone:</strong> {{ staff.phone|default:"Not provided" }}
+        </div>
+
+        <div class="detail">
+            <strong>Department:</strong> {{ staff.department|default:"Not assigned" }}
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Students in Your Department</h2>
+
+        <p>Total Students</p>
+
+        <div class="total">{{ total_students }}</div>
+
+        <p>
+            Total students belonging to your department.
+        </p>
+    </div>
+
+</div>
+
+</body>
+</html>
+

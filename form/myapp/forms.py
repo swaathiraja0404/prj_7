@@ -1,9 +1,15 @@
 from django import forms
 from .models import MyappStudent,MyappStaff,Department,UserAuth
 class Personal(forms.ModelForm):
+        # password = forms.CharField(
+        #     widget=forms.PasswordInput(attrs={
+        #             "class": "info-box",
+        #             "placeholder": "Enter your password"
+        #         })
+        #     )
         class Meta:
             model=MyappStudent
-            fields = ['name','age','dod','phone','email']
+            fields = ['name','age','dod','phone','email','department']
         
         name = forms.CharField(max_length=100,
         widget=forms.TextInput(attrs=
@@ -43,14 +49,19 @@ class Personal(forms.ModelForm):
 
         }
         ))
-
-class StaffPersonal(forms.ModelForm):
-            password = forms.CharField(
-                widget=forms.PasswordInput(attrs={
-                    "class": "info-box",
-                    "placeholder": "Enter your password"
+        department = forms.ModelChoiceField(queryset=Department.objects.all(),empty_label="Select Department",
+            widget=forms.Select(attrs={
+                    "class": "info-box"
                 })
             )
+
+class StaffPersonal(forms.ModelForm):
+            # password = forms.CharField(
+            #     widget=forms.PasswordInput(attrs={
+            #         "class": "info-box",
+            #         "placeholder": "Enter your password"
+            #     })
+            # )
 
             class Meta:
                 model=MyappStaff
