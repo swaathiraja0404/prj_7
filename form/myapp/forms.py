@@ -1,5 +1,5 @@
 from django import forms
-from .models import MyappStudent,MyappStaff,Department,UserAuth
+from .models import MyappStudent,MyappStaff,Department,UserAuth,StudentMark,Subject
 class Personal(forms.ModelForm):
         # password = forms.CharField(
         #     widget=forms.PasswordInput(attrs={
@@ -149,4 +149,36 @@ class LoginForm(forms.Form):
                     'placeholder': 'Enter your password'
                 })
             )
+
+class StudentMarkForm(forms.Form):
+    subject = forms.ModelChoiceField(
+        queryset=Subject.objects.none(),
+        empty_label="Select Subject",
+        widget=forms.Select(attrs={
+                    'class': 'info-box'
+                })
+        
+    )
+
+    internal_marks = forms.IntegerField(
+        min_value=0,
+        widget=forms.NumberInput(attrs={
+            'class': 'info-box',
+            'placeholder': 'Enter internal marks'
+        })
+    )
+
+    external_marks = forms.IntegerField(
+        min_value=0,
+        widget=forms.NumberInput(attrs={
+            'class': 'info-box',
+            'placeholder': 'Enter external marks'
+        })
+    )
+
+    def __init__(self, *args, subjects=None, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        if subjects is not None:
+            self.fields['subject'].queryset = subjects
 
