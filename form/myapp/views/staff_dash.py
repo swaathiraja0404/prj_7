@@ -1,8 +1,8 @@
 from django.contrib import messages
 from django.shortcuts import render, redirect,get_object_or_404
 from django.contrib.auth.hashers import make_password, check_password
-from ..forms import StudentMarkForm
-from ..models import MyappStaff, MyappStudent, Subject, Timetable, StudentMark, UserAuth
+from ..forms import StudentMarkForm,YearSubjectForm
+from ..models import MyappStaff, MyappStudent, Subject, Timetable, StudentMark, UserAuth,YearSubject
 def staff_dashboard(request):
     staff_id = request.session.get('staff_id')
     if not staff_id:
@@ -194,4 +194,41 @@ def staff_change_password(request):
         request,
         'students/staff_change_password.html',
         {'staff': staff}
+    )
+
+def year_subject_view(request):
+    staff_id = request.session.get('staff_id')
+
+    if not staff_id:
+        return redirect('login')
+
+    staff = get_object_or_404(MyappStaff, id=staff_id)
+
+    if request.method == 'POST':
+        form = YearSubjectForm(request.POST)
+
+        if form.is_valid():
+            form.save()
+
+            messages.success(
+                request,
+                'Department, year and subject mapped successfully!'
+            )
+
+            return redirect('year_subject')
+    else:
+        form = YearSubjectForm()
+
+    mappings = YearSubject.objects.select_related(
+        'department', 'year', 'subject'
+    ).all()
+
+    return render(
+        request,
+        'students/year_subject.html',
+        {
+            'staff': staff,
+            'form': form,
+            'mappings': mappings,
+        }
     )

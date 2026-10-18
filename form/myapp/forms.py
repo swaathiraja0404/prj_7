@@ -1,5 +1,5 @@
 from django import forms
-from .models import MyappStudent,MyappStaff,Department,UserAuth,StudentMark,Subject
+from .models import MyappStudent,MyappStaff,Department,UserAuth,StudentMark,Subject,YearSubject
 class Personal(forms.ModelForm):
         # password = forms.CharField(
         #     widget=forms.PasswordInput(attrs={
@@ -9,7 +9,7 @@ class Personal(forms.ModelForm):
         #     )
         class Meta:
             model=MyappStudent
-            fields = ['name','age','dod','phone','email','department']
+            fields = ['name','age','dod','phone','email','department','admission_date']
         
         name = forms.CharField(max_length=100,
         widget=forms.TextInput(attrs=
@@ -54,7 +54,12 @@ class Personal(forms.ModelForm):
                     "class": "info-box"
                 })
             )
-
+        admission_date = forms.DateField(
+            widget=forms.DateInput(attrs={
+                "class": "info-box",
+                "type": "date"
+            })
+        )
 class StaffPersonal(forms.ModelForm):
             # password = forms.CharField(
             #     widget=forms.PasswordInput(attrs={
@@ -182,3 +187,20 @@ class StudentMarkForm(forms.Form):
         if subjects is not None:
             self.fields['subject'].queryset = subjects
 
+
+class YearSubjectForm(forms.ModelForm):
+    class Meta:
+        model = YearSubject
+        fields = ['department', 'year', 'subject']
+
+        widgets = {
+            'department': forms.Select(attrs={
+                'class': 'info-box'
+            }),
+            'year': forms.Select(attrs={
+                'class': 'info-box'
+            }),
+            'subject': forms.Select(attrs={
+                'class': 'info-box'
+            }),
+        }

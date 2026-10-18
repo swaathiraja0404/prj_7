@@ -6,7 +6,8 @@ class MyappStudent(models.Model):
     dod = models.DateField(null=True)
     phone=models.CharField(max_length=10,null=True)
     email = models.CharField(unique=True, max_length=254)
-    department = models.CharField(max_length=100,null=True)    
+    department = models.CharField(max_length=100,null=True)  
+    admission_date = models.DateField(null=True, blank=True)  
     class Meta:
         db_table = 'myapp_student'
     def __str__(self):
@@ -50,6 +51,13 @@ class Subject(models.Model):
     def __str__(self):
         return f"{self.subject_code} - {self.subject_name}"
 
+class AcademicYear(models.Model):
+    year_id = models.AutoField(primary_key=True)
+    year_name = models.CharField(max_length=20, unique=True)
+
+    def __str__(self):
+        return self.year_name
+
 
 class Timetable(models.Model):
     
@@ -83,6 +91,14 @@ class Timetable(models.Model):
         blank=True,
         null=True
     )
+    year = models.ForeignKey(
+        AcademicYear,
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        db_column="year_id"
+    )
+
     def __str__(self):
         return f"{self.staff.name} - {self.subject.subject_name} - {self.day}"
 
@@ -124,3 +140,29 @@ class StudentMark(models.Model):
         return f"{self.student.name} - {self.subject.subject_name}"
 
 
+class YearSubject(models.Model):
+    id = models.AutoField(primary_key=True)
+
+    year = models.ForeignKey(
+        AcademicYear,
+        on_delete=models.CASCADE,
+        db_column='year_id'
+    )
+
+    subject = models.ForeignKey(
+        Subject,
+        on_delete=models.CASCADE,
+        db_column='subject_id'
+    )
+    department = models.ForeignKey(
+    Department,
+    on_delete=models.CASCADE,
+    db_column='department_id',
+    null=True,
+    blank=True
+)
+    class Meta:
+        db_table = 'myapp_yearsubject'
+
+    def __str__(self):
+        return f"{self.department.dept_name} - {self.year.year_name} - {self.subject.subject_name}"

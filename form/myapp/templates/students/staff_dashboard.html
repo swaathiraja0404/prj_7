@@ -23,7 +23,6 @@
             margin: auto;
         }
 
-        /* Dashboard heading and buttons */
         .dashboard-header {
             display: flex;
             justify-content: space-between;
@@ -142,7 +141,6 @@
             margin-top: 15px;
         }
 
-        /* Add / Update Marks button */
         .marks-btn {
             display: inline-block;
             background-color: #2563eb;
@@ -159,6 +157,29 @@
 
         .marks-btn:hover {
             background-color: #1d4ed8;
+        }
+
+        /* Year Subject Mapping Button */
+        .mapping-btn {
+            display: inline-block;
+            background-color: #7c3aed;
+            color: white;
+            padding: 12px 18px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .mapping-btn:hover {
+            background-color: #5b21b6;
+        }
+
+        .mapping-description {
+            color: #475569;
+            line-height: 1.6;
+            margin-bottom: 20px;
         }
 
         @keyframes fadeIn {
@@ -207,6 +228,12 @@
                 padding: 8px 10px;
                 font-size: 12px;
             }
+
+            .mapping-btn {
+                display: block;
+                text-align: center;
+                width: 100%;
+            }
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -225,7 +252,7 @@
 
 <div class="dashboard">
 
-    <!-- Dashboard Heading and Staff Actions -->
+    <!-- Dashboard Header -->
     <div class="dashboard-header">
 
         <h1>Staff Dashboard</h1>
@@ -246,7 +273,7 @@
 
     </div>
 
-    <!-- 1. Staff Information -->
+    <!-- Staff Information -->
     <div class="card">
 
         <h2>Welcome, {{ staff.name }}!</h2>
@@ -278,7 +305,7 @@
 
     </div>
 
-    <!-- 2. Student Count -->
+    <!-- Total Students -->
     <div class="card">
 
         <h2>Students in Your Department</h2>
@@ -293,7 +320,7 @@
 
     </div>
 
-    <!-- 3. Student Details -->
+    <!-- Student Details -->
     <div class="card">
 
         <h2>Student Details</h2>
@@ -355,7 +382,7 @@
 
     </div>
 
-    <!-- 4. Subjects in Your Department -->
+    <!-- Department Subjects -->
     <div class="card">
 
         <h2>Subjects in Your Department</h2>
@@ -399,7 +426,7 @@
 
     </div>
 
-    <!-- 5. Staff Timetable -->
+    <!-- My Timetable -->
     <div class="card">
 
         <h2>My Timetable</h2>
@@ -455,7 +482,25 @@
 
     </div>
 
+    <!-- Year Subject Mapping -->
+    <div class="card">
+
+        <h2>Year Subject Mapping</h2>
+
+        <p class="mapping-description">
+            Assign subjects to the appropriate department and academic year.
+            Manage which subjects belong to 1st Year, 2nd Year,
+            3rd Year and 4th Year.
+        </p>
+
+        <a href="{% url 'year_subject' %}" class="mapping-btn">
+            Manage Year Subjects
+        </a>
+
+    </div>
+
 </div>
 
 </body>
 </html>
+
