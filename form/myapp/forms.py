@@ -1,15 +1,10 @@
 from django import forms
-from .models import MyappStudent,MyappStaff,Department,UserAuth,StudentMark,Subject,YearSubject
+from .models import MyappStudent,MyappStaff,Department,UserAuth,StudentMark,Subject,YearSubject,AcademicYear
 class Personal(forms.ModelForm):
-        # password = forms.CharField(
-        #     widget=forms.PasswordInput(attrs={
-        #             "class": "info-box",
-        #             "placeholder": "Enter your password"
-        #         })
-        #     )
+
         class Meta:
             model=MyappStudent
-            fields = ['name','age','dod','phone','email','department','admission_date']
+            fields = ['name','age','dod','phone','email','department','admission_date','year']
         
         name = forms.CharField(max_length=100,
         widget=forms.TextInput(attrs=
@@ -60,6 +55,13 @@ class Personal(forms.ModelForm):
                 "type": "date"
             })
         )
+        year = forms.ModelChoiceField(
+        queryset=AcademicYear.objects.all(),
+        empty_label="Select Year",
+        widget=forms.Select(attrs={
+            "class": "info-box"
+        })
+    )
 class StaffPersonal(forms.ModelForm):
             # password = forms.CharField(
             #     widget=forms.PasswordInput(attrs={
@@ -134,12 +136,12 @@ class LoginForm(forms.Form):
                     'class': 'info-box'
                 })
             )
-            user_id = forms.IntegerField(
-                widget=forms.NumberInput(attrs={
-                    'class': 'info-box', 
-                    'placeholder': 'Enter your User ID' 
-                }) 
-            )
+            # user_id = forms.IntegerField(
+            #     widget=forms.NumberInput(attrs={
+            #         'class': 'info-box', 
+            #         'placeholder': 'Enter your User ID' 
+            #     }) 
+            # )
             username = forms.CharField(
                 max_length=254,
                 widget=forms.TextInput(attrs={
@@ -154,6 +156,7 @@ class LoginForm(forms.Form):
                     'placeholder': 'Enter your password'
                 })
             )
+
 
 class StudentMarkForm(forms.Form):
     subject = forms.ModelChoiceField(

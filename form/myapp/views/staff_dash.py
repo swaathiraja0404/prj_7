@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.shortcuts import render, redirect,get_object_or_404
 from django.contrib.auth.hashers import make_password, check_password
 from ..forms import StudentMarkForm,YearSubjectForm
-from ..models import MyappStaff, MyappStudent, Subject, Timetable, StudentMark, UserAuth,YearSubject
+from ..models import MyappStaff, MyappStudent, Subject, Timetable, StudentMark, UserAuth,YearSubject, AcademicYear
 def staff_dashboard(request):
     staff_id = request.session.get('staff_id')
     if not staff_id:
@@ -13,10 +13,15 @@ def staff_dashboard(request):
         request.session.flush()
         return redirect('login')
     department = (staff.department or '').strip().upper()
-
     students = MyappStudent.objects.filter(
         department__iexact=department
-    ).order_by('id')
+    )
+    selected_year = request.GET.get('year', '').strip()
+    if selected_year and selected_year.isdigit():
+        students = students.filter(
+            year_id=int(selected_year)
+        )
+    students = students.order_by('id')
     total_students = students.count()
     department_codes = {
         'IT': 'IT',
@@ -39,18 +44,24 @@ def staff_dashboard(request):
     ).order_by(
         'day', 'start_time'
     )
+    years = AcademicYear.objects.all().order_by('year_id')
+
     context = {
         'staff': staff,
         'students': students,
         'total_students': total_students,
         'subjects': subjects,
         'timetable': timetable,
+        'years': years,
+        'selected_year': selected_year,
     }
+
     return render(
         request,
         'students/staff_dashboard.html',
         context
     )
+
 def add_student_marks(request, student_id):
     staff_id = request.session.get('staff_id')
     if not staff_id:

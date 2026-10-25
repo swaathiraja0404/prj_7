@@ -8,6 +8,7 @@ class MyappStudent(models.Model):
     email = models.CharField(unique=True, max_length=254)
     department = models.CharField(max_length=100,null=True)  
     admission_date = models.DateField(null=True, blank=True)  
+    year = models.ForeignKey( 'AcademicYear',on_delete=models.PROTECT,null=True,blank=True)
     class Meta:
         db_table = 'myapp_student'
     def __str__(self):
