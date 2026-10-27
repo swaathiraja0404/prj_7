@@ -19,7 +19,7 @@ def log(request):
 
                 if role == 'Student':
                     messages.success(request, "Login successful!")
-                    return redirect("Student_personal_info")
+                    return render("student_dashboard.html")
 
                 elif role == 'Staff':
 

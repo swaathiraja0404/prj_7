@@ -110,7 +110,8 @@
             margin-top: 20px;
         }
 
-        th, td {
+        th,
+        td {
             padding: 12px;
             text-align: left;
             border: 1px solid #ddd;
@@ -221,6 +222,7 @@
             margin-bottom: 20px;
         }
 
+        /* Break row */
         .break-row td {
             background-color: #fef3c7 !important;
             color: #92400e;
@@ -228,6 +230,7 @@
             font-weight: bold;
         }
 
+        /* Lunch row */
         .lunch-row td {
             background-color: #dcfce7 !important;
             color: #166534;
@@ -243,6 +246,59 @@
         .timetable-note {
             color: #475569;
             line-height: 1.7;
+        }
+
+        /* Weekly timetable */
+        .timetable-grid {
+            width: 100%;
+            min-width: 720px;
+            border-collapse: collapse;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .timetable-grid th {
+            background-color: #2563eb;
+            color: white;
+            text-align: center;
+            padding: 14px 10px;
+        }
+
+        .timetable-grid td {
+            text-align: center;
+            white-space: normal;
+            min-width: 105px;
+            padding: 14px 10px;
+            color: #334155;
+        }
+
+        .timetable-grid td:first-child {
+            background-color: #eff6ff;
+            color: #1e293b;
+            font-weight: bold;
+            min-width: 145px;
+        }
+
+        .timetable-grid .break-row td,
+        .timetable-grid .lunch-row td {
+            text-align: center;
+        }
+
+        .subject-code {
+            display: block;
+            color: #1d4ed8;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .subject-name {
+            display: block;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .empty-period {
+            color: #94a3b8;
         }
 
         @keyframes fadeIn {
@@ -274,7 +330,8 @@
                 padding: 15px;
             }
 
-            th, td {
+            th,
+            td {
                 padding: 8px;
                 font-size: 13px;
             }
@@ -342,9 +399,7 @@
             </a>
 
         </div>
-
     </div>
-
 
     <!-- Staff Details -->
     <div class="card">
@@ -375,7 +430,6 @@
 
     </div>
 
-
     <!-- Total Students -->
     <div class="card">
 
@@ -403,13 +457,12 @@
 
     </div>
 
-
-    <!-- Student Details and Year Filter -->
+    <!-- Student Details -->
     <div class="card">
 
         <h2>Student Details</h2>
 
-        <form method="GET" class="year-filter-form" id="yearFilterForm">
+        <form method="GET" class="year-filter-form">
 
             <label for="year">Select Academic Year:</label>
 
@@ -420,12 +473,14 @@
                 <option value="">All Years</option>
 
                 {% for year in years %}
+
                     <option value="{{ year.year_id }}"
                         {% if selected_year == year.year_id|stringformat:"s" %}
                             selected
                         {% endif %}>
                         {{ year.year_name }}
                     </option>
+
                 {% endfor %}
 
             </select>
@@ -444,6 +499,7 @@
             <div class="table-container">
 
                 <table>
+
                     <thead>
                         <tr>
                             <th>Student ID</th>
@@ -457,7 +513,9 @@
                     </thead>
 
                     <tbody>
+
                         {% for student in students %}
+
                             <tr>
                                 <td>{{ student.id }}</td>
                                 <td>{{ student.name }}</td>
@@ -480,8 +538,11 @@
                                     </a>
                                 </td>
                             </tr>
+
                         {% endfor %}
+
                     </tbody>
+
                 </table>
 
             </div>
@@ -489,20 +550,21 @@
         {% else %}
 
             <p class="no-students">
+
                 {% if selected_year %}
                     No students found for the selected year
                     in your department.
                 {% else %}
                     No students found in your department.
                 {% endif %}
+
             </p>
 
         {% endif %}
 
     </div>
 
-
-    <!-- Department and Year-wise Subjects -->
+    <!-- Department Subjects -->
     <div class="card">
 
         <h2>Subjects in Your Department</h2>
@@ -515,15 +577,21 @@
         <p>
             Academic Year:
             <strong>
+
                 {% if selected_year %}
+
                     {% for year in years %}
+
                         {% if selected_year == year.year_id|stringformat:"s" %}
                             {{ year.year_name }}
                         {% endif %}
+
                     {% endfor %}
+
                 {% else %}
                     All Years
                 {% endif %}
+
             </strong>
         </p>
 
@@ -532,6 +600,7 @@
             <div class="table-container">
 
                 <table>
+
                     <thead>
                         <tr>
                             <th>Subject Code</th>
@@ -540,13 +609,18 @@
                     </thead>
 
                     <tbody>
+
                         {% for subject in subjects %}
+
                             <tr>
                                 <td>{{ subject.subject_code }}</td>
                                 <td>{{ subject.subject_name }}</td>
                             </tr>
+
                         {% endfor %}
+
                     </tbody>
+
                 </table>
 
             </div>
@@ -561,86 +635,89 @@
 
     </div>
 
-
-    <!-- Staff Timetable -->
+    <!-- Weekly Staff Timetable -->
     <div class="card">
 
-        <h2>My Timetable</h2>
+        <h2>My Weekly Timetable</h2>
 
         <p class="timetable-note">
             Department:
-            <strong>{{ staff.department|default:"Not assigned" }}</strong>
+            <strong>{{ staff.department|upper }}</strong>
         </p>
 
         <p class="timetable-note">
             {% if selected_year %}
-                The selected year's timetable is excluded.
+                Showing timetable for the selected academic year.
             {% else %}
-                Showing timetable records for all assigned academic years.
+                Showing available timetable records for your account.
             {% endif %}
         </p>
 
-        <p class="timetable-note">
-            <strong>Break:</strong> 11:00 AM – 11:15 AM
-            &nbsp; | &nbsp;
-            <strong>Lunch:</strong> 1:15 PM – 2:15 PM
-        </p>
-
-        {% if timetable %}
+        {% if timetable_rows %}
 
             <div class="table-container">
 
-                <table>
+                <table class="timetable-grid">
+
                     <thead>
                         <tr>
-                            <th>Day</th>
-                            <th>Academic Year</th>
-                            <th>Subject Code</th>
-                            <th>Subject Name</th>
-                            <th>Start Time</th>
-                            <th>End Time</th>
-                            <th>Room Number</th>
+                            <th>Time</th>
+
+                            {% for day in days %}
+                                <th>{{ day }}</th>
+                            {% endfor %}
+
                         </tr>
                     </thead>
 
                     <tbody>
 
-                        {% for item in timetable %}
+                        {% for row in timetable_rows %}
 
-                            <!-- Break row -->
-                            {% ifchanged item.day %}
-                                {% if not forloop.first %}
-                                    <!-- Day change handled by the day column -->
-                                {% endif %}
-                            {% endifchanged %}
+                            <tr class="{% if row.kind == 'break' %}break-row{% elif row.kind == 'lunch' %}lunch-row{% endif %}">
 
-                            <tr>
-                                <td>{{ item.day }}</td>
+                                <td>{{ row.label }}</td>
 
-                                <td>
-                                    {% if item.year %}
-                                        {{ item.year.year_name }}
-                                    {% else %}
-                                        Not assigned
-                                    {% endif %}
-                                </td>
+                                {% for cell in row.cells %}
 
-                                <td>{{ item.subject.subject_code }}</td>
+                                    <td>
 
-                                <td>{{ item.subject.subject_name }}</td>
+                                        {% if row.kind == 'break' %}
 
-                                <td>{{ item.start_time|time:"h:i A" }}</td>
+                                            <strong>BREAK</strong>
 
-                                <td>{{ item.end_time|time:"h:i A" }}</td>
+                                        {% elif row.kind == 'lunch' %}
 
-                                <td>
-                                    {{ item.room_number|default:"Not assigned" }}
-                                </td>
+                                            <strong>LUNCH</strong>
+
+                                        {% elif cell.code %}
+
+                                            <span class="subject-code">
+                                                {{ cell.code }}
+                                            </span>
+
+                                            <span class="subject-name">
+                                                {{ cell.subject }}
+                                            </span>
+
+                                        {% else %}
+
+                                            <span class="empty-period">
+                                                {{ cell.subject }}
+                                            </span>
+
+                                        {% endif %}
+
+                                    </td>
+
+                                {% endfor %}
+
                             </tr>
 
                         {% endfor %}
 
                     </tbody>
+
                 </table>
 
             </div>
@@ -654,7 +731,6 @@
         {% endif %}
 
     </div>
-
 
     <!-- Year Subject Mapping -->
     <div class="card">

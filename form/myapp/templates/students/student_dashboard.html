@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Staff Dashboard</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #dbeafe, #f5d0fe);
+            margin: 0;
+            padding: 40px 20px;
+        }
+
+        .dashboard {
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: #1e293b;
+            text-align: center;
+            margin: 0;
+            flex: 1;
+        }
+
+        .staff-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            display: inline-block;
+            padding: 11px 15px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: bold;
+            color: white;
+            transition: 0.3s;
+            text-align: center;
+        }
+
+        .change-password-btn {
+            background-color: #4f46e5;
+        }
+
+        .change-password-btn:hover {
+            background-color: #3730a3;
+        }
+
+        .logout-btn {
+            background-color: #dc2626;
+        }
+
+        .logout-btn:hover {
+            background-color: #b91c1c;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.7s ease;
+        }
+
+        .card h2 {
+            color: #2563eb;
+            margin-top: 0;
+        }
+
+        .detail {
+            margin: 15px 0;
+            font-size: 17px;
+            color: #334155;
+        }
+
+        .total {
+            font-size: 40px;
+            font-weight: bold;
+            color: #2563eb;
+        }
+
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #ddd;
+            white-space: nowrap;
+        }
+
+        th {
+            background-color: #2563eb;
+            color: white;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #f1f5f9;
+        }
+
+        tbody tr:hover {
+            background-color: #dbeafe;
+        }
+
+        tbody tr {
+            transition: background-color 0.3s ease;
+        }
+
+        .no-subjects,
+        .no-timetable,
+        .no-students {
+            color: #64748b;
+            margin-top: 15px;
+        }
+
+        .marks-btn {
+            display: inline-block;
+            background-color: #2563eb;
+            color: white;
+            padding: 9px 13px;
+            border: none;
+            border-radius: 7px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .marks-btn:hover {
+            background-color: #1d4ed8;
+        }
+
+        .year-filter-form {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+            padding: 18px;
+            background-color: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 10px;
+        }
+
+        .year-filter-form label {
+            color: #1e293b;
+            font-weight: bold;
+        }
+
+        .year-filter-form select {
+            min-width: 180px;
+            padding: 11px 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 7px;
+            background-color: white;
+            font-size: 14px;
+            color: #1e293b;
+            cursor: pointer;
+        }
+
+        .clear-filter-btn {
+            display: inline-block;
+            color: #2563eb;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .clear-filter-btn:hover {
+            text-decoration: underline;
+        }
+
+        .mapping-btn {
+            display: inline-block;
+            background-color: #7c3aed;
+            color: white;
+            padding: 12px 18px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .mapping-btn:hover {
+            background-color: #5b21b6;
+        }
+
+        .mapping-description {
+            color: #475569;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .break-row td {
+            background-color: #fef3c7 !important;
+            color: #92400e;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .lunch-row td {
+            background-color: #dcfce7 !important;
+            color: #166534;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .timetable-heading {
+            margin-top: 25px;
+            color: #1e293b;
+        }
+
+        .timetable-note {
+            color: #475569;
+            line-height: 1.7;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 700px) {
+            body {
+                padding: 20px 10px;
+            }
+
+            .dashboard-header {
+                flex-direction: column;
+            }
+
+            .staff-actions {
+                justify-content: center;
+            }
+
+            .card {
+                padding: 15px;
+            }
+
+            th, td {
+                padding: 8px;
+                font-size: 13px;
+            }
+
+            .detail {
+                font-size: 15px;
+            }
+
+            .total {
+                font-size: 32px;
+            }
+
+            .marks-btn {
+                padding: 8px 10px;
+                font-size: 12px;
+            }
+
+            .mapping-btn {
+                display: block;
+                text-align: center;
+                width: 100%;
+            }
+
+            .year-filter-form {
+                align-items: stretch;
+                flex-direction: column;
+            }
+
+            .year-filter-form select {
+                width: 100%;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .card {
+                animation: none;
+            }
+
+            tbody tr {
+                transition: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="dashboard">
+
+<h1>Welcome to student dashboard</h1>
+
+ 
+
+</div>
+
+</body>
+</html>
+
