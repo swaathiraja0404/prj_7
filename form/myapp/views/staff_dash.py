@@ -23,27 +23,47 @@ def staff_dashboard(request):
         )
     students = students.order_by('id')
     total_students = students.count()
-    department_codes = {
-        'IT': 'IT',
-        'CSE': 'CSE',
-        'EEE': 'EEE',
-        'AIDS': 'AIDS',
-        'CIVIL': 'CIV',
-    }
-    prefix = department_codes.get(department)
-    if prefix:
-        subjects = Subject.objects.filter(
-            subject_code__startswith=prefix
-        ).order_by('subject_code')
-    else:
-        subjects = Subject.objects.none()
-    timetable = Timetable.objects.filter(
-        staff=staff
-    ).select_related(
-        'subject'
-    ).order_by(
-        'day', 'start_time'
+    # Get subjects based on staff department
+    year_subjects = YearSubject.objects.filter(
+        department__dept_name__iexact=department
     )
+
+    # Filter subjects based on selected academic year
+    if selected_year and selected_year.isdigit():
+        year_subjects = year_subjects.filter(
+            year_id=int(selected_year)
+        )
+
+    # Get the mapped subjects
+    subjects = Subject.objects.filter(
+        id__in=year_subjects.values_list(
+            'subject_id',
+            flat=True
+        )
+    ).order_by('subject_code')
+
+    timetable = Timetable.objects.filter(
+        staff=staff,
+        day__in=[
+            'Monday',
+            'Tuesday',
+            'Wednesday',
+            'Thursday',
+            'Friday'
+        ]
+    ).select_related(
+        'subject',
+        'year'
+    ).order_by(
+        'day',
+        'start_time'
+    )
+
+    # Exclude the selected academic year's timetable
+    if selected_year and selected_year.isdigit():
+        timetable = timetable.exclude(
+            year_id=int(selected_year)
+        )    
     years = AcademicYear.objects.all().order_by('year_id')
 
     context = {
@@ -58,7 +78,7 @@ def staff_dashboard(request):
 
     return render(
         request,
-        'students/staff_dashboard.html',
+        'students/staff_dashxboard.html',
         context
     )
 

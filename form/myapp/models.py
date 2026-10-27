@@ -61,14 +61,13 @@ class AcademicYear(models.Model):
 
 
 class Timetable(models.Model):
-    
+
     DAY_CHOICES = [
         ('Monday', 'Monday'),
         ('Tuesday', 'Tuesday'),
         ('Wednesday', 'Wednesday'),
         ('Thursday', 'Thursday'),
         ('Friday', 'Friday'),
-        ('Saturday', 'Saturday'),
     ]
 
     staff = models.ForeignKey(
@@ -85,13 +84,16 @@ class Timetable(models.Model):
         max_length=15,
         choices=DAY_CHOICES
     )
+
     start_time = models.TimeField()
     end_time = models.TimeField()
+
     room_number = models.CharField(
         max_length=20,
         blank=True,
         null=True
     )
+
     year = models.ForeignKey(
         AcademicYear,
         on_delete=models.PROTECT,
