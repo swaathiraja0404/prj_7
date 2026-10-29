@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
-from ..models import MyappStudent, StudentMark, YearSubject, Timetable
+from ..models import MyappStudent, StudentMark, YearSubject, Timetable,UserAuth
+from django.contrib.auth.hashers import make_password, check_password
 
 def student_dashboard(request):
     student_id = request.session.get('student_id')
@@ -98,3 +99,76 @@ def student_dashboard(request):
         'students/student_dashboard.html',
         context
     )
+
+
+def student_change_password(request):
+    student_id = request.session.get('student_id')
+
+    if not student_id:
+        messages.error(request, "Please login first.")
+        return redirect('log')
+
+    student = get_object_or_404(
+        MyappStudent,
+        id=student_id
+    )
+
+    if request.method == 'POST':
+        old_password = request.POST.get('old_password', '')
+        new_password = request.POST.get('new_password', '')
+        confirm_password = request.POST.get('confirm_password', '')
+
+        user = UserAuth.objects.filter(
+            user_id=student.id,
+            role__iexact='Student'
+        ).first()
+
+        if not user:
+            messages.error(
+                request,
+                'Student login account not found.'
+            )
+
+        elif not user.password or not check_password(
+            old_password, user.password
+        ):
+            messages.error(
+                request,
+                'Old password is incorrect.'
+            )
+
+        elif len(new_password) < 8:
+            messages.error(
+                request,
+                'New password must contain at least 8 characters.'
+            )
+
+        elif new_password != confirm_password:
+            messages.error(
+                request,
+                'New password and confirm password do not match.'
+            )
+
+        elif old_password == new_password:
+            messages.error(
+                request,
+                'New password must be different from the old password.'
+            )
+
+        else:
+            user.password = make_password(new_password)
+            user.save(update_fields=['password'])
+
+            messages.success(
+                request,
+                'Password changed successfully!'
+            )
+
+            return redirect('student_dashboard')
+
+    return render(
+        request,
+        'students/change_password.html',
+        {'student': student}
+    )
+

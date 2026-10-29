@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Student Dashboard | LMS</title>
 
     <style>
@@ -43,17 +44,33 @@
             color: #db2777;
         }
 
-        .logout {
+        .nav-buttons {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            display: inline-block;
             text-decoration: none;
-            background: linear-gradient(135deg, #6366f1, #a855f7);
             color: white;
-            padding: 10px 20px;
+            padding: 10px 18px;
             border-radius: 12px;
+            font-size: 14px;
             font-weight: 600;
             transition: 0.3s;
         }
 
-        .logout:hover {
+        .change-password {
+            background: linear-gradient(135deg, #0f766e, #14b8a6);
+        }
+
+        .logout {
+            background: linear-gradient(135deg, #6366f1, #a855f7);
+        }
+
+        .nav-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 20px #a855f744;
         }
@@ -221,7 +238,11 @@
             color: #166534;
         }
 
-        /* Weekly Timetable Styles */
+        .message.error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
         .timetable-note {
             color: #64748b;
             margin-bottom: 15px;
@@ -279,31 +300,8 @@
             line-height: 1.5;
         }
 
-        .break-row td {
-            background: #fef3c7;
-            color: #92400e;
-            text-align: center;
-            font-weight: 700;
-        }
-
-        .lunch-row td {
-            background: #dcfce7;
-            color: #166534;
-            text-align: center;
-            font-weight: 700;
-        }
-
         .empty-period {
             color: #94a3b8;
-        }
-
-        .no-timetable {
-            padding: 20px;
-            text-align: center;
-            color: #64748b;
-            background: #f8fafc;
-            border-radius: 12px;
-            line-height: 1.7;
         }
 
         footer {
@@ -322,10 +320,20 @@
         @media (max-width: 600px) {
             .navbar {
                 padding: 16px 5%;
+                align-items: flex-start;
+                flex-direction: column;
             }
 
             .brand {
                 font-size: 19px;
+            }
+
+            .nav-buttons {
+                width: 100%;
+            }
+
+            .nav-btn {
+                text-align: center;
             }
 
             .container {
@@ -351,8 +359,25 @@
 <body>
 
 <nav class="navbar">
-    <div class="brand">My<span> Learning Mangement</span></div>
-    <a href="{% url 'log' %}" class="logout">Logout</a>
+
+    <div class="brand">
+        My<span> Learning Management</span>
+    </div>
+
+    <div class="nav-buttons">
+
+        <a href="{% url 'student_change_password' %}"
+           class="nav-btn change-password">
+            🔐 Change Password
+        </a>
+
+        <a href="{% url 'log' %}"
+           class="nav-btn logout">
+            Logout
+        </a>
+
+    </div>
+
 </nav>
 
 <main class="container">
@@ -360,16 +385,23 @@
     {% if messages %}
     <div class="messages">
         {% for message in messages %}
-            <div class="message">{{ message }}</div>
+            <div class="message {% if message.tags == 'error' %}error{% endif %}">
+                {{ message }}
+            </div>
         {% endfor %}
     </div>
     {% endif %}
 
+    <!-- Welcome -->
     <section class="welcome">
         <h1>Welcome, {{ student.name }}! 👋</h1>
-        <p>Your learning space — check your profile, subjects, marks and timetable in one place.</p>
+        <p>
+            Your learning space — check your profile, subjects,
+            marks and timetable in one place.
+        </p>
     </section>
 
+    <!-- Dashboard Statistics -->
     <section class="grid">
 
         <div class="stat">
@@ -399,12 +431,15 @@
 
     <!-- Student Profile -->
     <section class="section">
+
         <div class="card">
+
             <h2>👩‍🎓 My Profile</h2>
 
             <div class="grid" style="margin-bottom: 0;">
 
                 <div>
+
                     <div class="info-item">
                         <span class="label">Student ID</span>
                         <span class="value">{{ student.id }}</span>
@@ -419,12 +454,16 @@
                         <span class="label">Email</span>
                         <span class="value">{{ student.email }}</span>
                     </div>
+
                 </div>
 
                 <div>
+
                     <div class="info-item">
                         <span class="label">Phone Number</span>
-                        <span class="value">{{ student.phone|default:"Not provided" }}</span>
+                        <span class="value">
+                            {{ student.phone|default:"Not provided" }}
+                        </span>
                     </div>
 
                     <div class="info-item">
@@ -438,9 +477,11 @@
                             {{ student.department|default:"Not assigned" }}
                         </span>
                     </div>
+
                 </div>
 
                 <div>
+
                     <div class="info-item">
                         <span class="label">Admission Date</span>
                         <span class="value">
@@ -458,19 +499,26 @@
                             {% endif %}
                         </span>
                     </div>
+
                 </div>
 
             </div>
+
         </div>
+
     </section>
 
     <!-- Student Subjects -->
     <section class="section">
+
         <h2 class="section-title">📚 My Subjects</h2>
 
         <div class="card">
+
             {% if subjects %}
+
             <div class="table-wrap">
+
                 <table>
                     <thead>
                         <tr>
@@ -485,34 +533,46 @@
                         {% for item in subjects %}
                         <tr>
                             <td>{{ forloop.counter }}</td>
+
                             <td>
                                 <span class="badge">
                                     {{ item.subject.subject_code }}
                                 </span>
                             </td>
+
                             <td>{{ item.subject.subject_name }}</td>
                             <td>{{ item.year.year_name }}</td>
                         </tr>
                         {% endfor %}
                     </tbody>
                 </table>
+
             </div>
+
             {% else %}
-                <div class="empty">
-                    No subjects found for your department and academic year.<br>
-                    Please contact your administrator to check your department, year and subject assignments.
-                </div>
+
+            <div class="empty">
+                No subjects found for your department and academic year.<br>
+                Please contact your administrator.
+            </div>
+
             {% endif %}
+
         </div>
+
     </section>
 
     <!-- Student Marks -->
     <section class="section">
+
         <h2 class="section-title">📝 My Marks</h2>
 
         <div class="card">
+
             {% if marks %}
+
             <div class="table-wrap">
+
                 <table>
                     <thead>
                         <tr>
@@ -532,101 +592,137 @@
                             <td>{{ mark.subject.subject_name }}</td>
                             <td>{{ mark.internal_marks }}</td>
                             <td>{{ mark.external_marks }}</td>
+
                             <td>
-                                <span class="badge">{{ mark.total_marks }}</span>
+                                <span class="badge">
+                                    {{ mark.total_marks }}
+                                </span>
                             </td>
+
                             <td>{{ mark.staff.name }}</td>
                         </tr>
                         {% endfor %}
                     </tbody>
                 </table>
+
             </div>
+
             {% else %}
-                <div class="empty">
-                    Your marks have not been entered yet.<br>
-                    Once your staff adds your marks, they will appear here.
-                </div>
+
+            <div class="empty">
+                Your marks have not been entered yet.<br>
+                Once your staff adds your marks, they will appear here.
+            </div>
+
             {% endif %}
+
         </div>
+
     </section>
 
-<section class="section">
-    <h2 class="section-title">🕒 My Timetable</h2>
+    <!-- Weekly Timetable -->
+    <section class="section">
 
-    <div class="card">
+        <h2 class="section-title">🕒 My Timetable</h2>
 
-        <p class="timetable-note">
-            Department:
-            <strong>{{ student.department|upper }}</strong>
-            &nbsp; | &nbsp;
-            Academic Year:
-            <strong>
-                {% if student.year %}
-                    {{ student.year.year_name }}
-                {% else %}
-                    Not assigned
-                {% endif %}
-            </strong>
-        </p>
+        <div class="card">
 
-        {% if timetable_rows %}
-        <div class="timetable-wrap">
-            <table class="timetable-grid">
-                <thead>
-                    <tr>
-                        <th>Time</th>
+            <p class="timetable-note">
 
-                        {% for day in days %}
-                            <th>{{ day }}</th>
-                        {% endfor %}
-                    </tr>
-                </thead>
+                Department:
+                <strong>{{ student.department|upper }}</strong>
 
-                <tbody>
-                    {% for row in timetable_rows %}
-                    <tr>
-                        <td>{{ row.label }}</td>
+                &nbsp; | &nbsp;
 
-                        {% for cell in row.cells %}
-                        <td>
-                            {% if cell.code %}
-                                <span class="subject-code">
-                                    {{ cell.code }}
-                                </span>
+                Academic Year:
+                <strong>
+                    {% if student.year %}
+                        {{ student.year.year_name }}
+                    {% else %}
+                        Not assigned
+                    {% endif %}
+                </strong>
 
-                                <span class="subject-name">
-                                    {{ cell.subject }}
-                                </span>
+            </p>
 
-                                <small>
-                                    {{ cell.staff }}
-                                </small>
+            {% if timetable_rows %}
 
-                                {% if cell.room %}
-                                    <br>
-                                    <small>Room: {{ cell.room }}</small>
+            <div class="timetable-wrap">
+
+                <table class="timetable-grid">
+
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+
+                            {% for day in days %}
+                                <th>{{ day }}</th>
+                            {% endfor %}
+
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for row in timetable_rows %}
+
+                        <tr>
+
+                            <td>{{ row.label }}</td>
+
+                            {% for cell in row.cells %}
+
+                            <td>
+
+                                {% if cell.code %}
+
+                                    <span class="subject-code">
+                                        {{ cell.code }}
+                                    </span>
+
+                                    <span class="subject-name">
+                                        {{ cell.subject }}
+                                    </span>
+
+                                    <small>{{ cell.staff }}</small>
+
+                                    {% if cell.room %}
+                                        <br>
+                                        <small>Room: {{ cell.room }}</small>
+                                    {% endif %}
+
+                                {% else %}
+
+                                    <span class="empty-period">—</span>
+
                                 {% endif %}
-                            {% else %}
-                                <span class="empty-period">—</span>
-                            {% endif %}
-                        </td>
+
+                            </td>
+
+                            {% endfor %}
+
+                        </tr>
+
                         {% endfor %}
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            {% else %}
+
+            <div class="empty">
+                No timetable found for your department and academic year.<br>
+                Please check the timetable assignments with your administrator.
+            </div>
+
+            {% endif %}
+
         </div>
 
-        {% else %}
-        <div class="empty">
-            No timetable found for your department and academic year.<br>
-            Please check the timetable assignments with your administrator.
-        </div>
-        {% endif %}
-
-    </div>
-</section>
-
+    </section>
 
 </main>
 

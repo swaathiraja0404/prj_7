@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Dashboard | LMS</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #dbeafe, #f5d0fe);
+        }
+
+        header {
+            background: white;
+            padding: 20px 35px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        header h2 {
+            color: #6d28d9;
+        }
+
+        .logout {
+            background: #7c3aed;
+            color: white;
+            padding: 10px 18px;
+            text-decoration: none;
+            border-radius: 8px;
+        }
+
+        .container {
+            padding: 35px;
+        }
+
+        .welcome {
+            margin-bottom: 25px;
+            color: #333;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 22px;
+        }
+
+        .card {
+            background: white;
+            padding: 28px;
+            border-radius: 16px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card h3 {
+            color: #666;
+            font-size: 17px;
+            margin-bottom: 15px;
+        }
+
+        .card p {
+            font-size: 32px;
+            font-weight: bold;
+            color: #6d28d9;
+        }
+
+        .section-title {
+            margin: 35px 0 20px;
+            color: #333;
+        }
+
+        .actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .action {
+            display: block;
+            padding: 18px;
+            background: white;
+            color: #6d28d9;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+        }
+
+        .action:hover {
+            background: #f3e8ff;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                padding: 18px;
+            }
+
+            .container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h2>🎓 LMS Admin</h2>
+        <a href="{% url 'admin_logout' %}" class="logout">Logout</a>
+    </header>
+
+    <div class="container">
+
+        <div class="welcome">
+            <h1>Welcome, {{ admin.username }}! 👋</h1>
+            <p>Manage your Learning Management System from here.</p>
+        </div>
+
+        <div class="cards">
+
+            <div class="card">
+                <h3>👨‍🎓 Total Students</h3>
+                <p>{{ total_students }}</p>
+            </div>
+
+            <div class="card">
+                <h3>👨‍🏫 Total Staff</h3>
+                <p>{{ total_staff }}</p>
+            </div>
+
+            <div class="card">
+                <h3>🏢 Departments</h3>
+                <p>{{ total_departments }}</p>
+            </div>
+
+            <div class="card">
+                <h3>📚 Subjects</h3>
+                <p>{{ total_subjects }}</p>
+            </div>
+
+        </div>
+
+        <h2 class="section-title">Management</h2>
+
+        <div class="actions">
+            <a href="#" class="action">👨‍🏫 Manage Staff</a>
+            <a href="#" class="action">👨‍🎓 Manage Students</a>
+            <a href="#" class="action">🏢 Manage Departments</a>
+            <a href="#" class="action">📚 Manage Subjects</a>
+            <a href="#" class="action">🗓️ Manage Timetable</a>
+        </div>
+
+    </div>
+
+</body>
+</html>

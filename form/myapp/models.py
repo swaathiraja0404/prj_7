@@ -169,3 +169,4 @@ class YearSubject(models.Model):
 
     def __str__(self):
         return f"{self.department.dept_name} - {self.year.year_name} - {self.subject.subject_name}"
+
