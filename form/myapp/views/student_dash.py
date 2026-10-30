@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from ..models import MyappStudent, StudentMark, YearSubject, Timetable,UserAuth
 from django.contrib.auth.hashers import make_password, check_password
 
+
 def student_dashboard(request):
     student_id = request.session.get('student_id')
 
@@ -172,3 +173,6 @@ def student_change_password(request):
         {'student': student}
     )
 
+def student_logout(request):
+    request.session.flush()
+    return redirect('log')

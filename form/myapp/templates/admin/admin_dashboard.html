@@ -99,10 +99,12 @@
             font-weight: bold;
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+            transition: 0.2s;
         }
 
         .action:hover {
             background: #f3e8ff;
+            transform: translateY(-3px);
         }
 
         @media (max-width: 600px) {
@@ -121,7 +123,10 @@
 
     <header>
         <h2>🎓 LMS Admin</h2>
-        <a href="{% url 'admin_logout' %}" class="logout">Logout</a>
+
+        <a href="{% url 'admin_logout' %}" class="logout">
+            Logout
+        </a>
     </header>
 
     <div class="container">
@@ -130,6 +135,8 @@
             <h1>Welcome, {{ admin.username }}! 👋</h1>
             <p>Manage your Learning Management System from here.</p>
         </div>
+
+        <!-- Dashboard Count Cards -->
 
         <div class="cards">
 
@@ -155,17 +162,38 @@
 
         </div>
 
+        <!-- Management Section -->
+
         <h2 class="section-title">Management</h2>
 
         <div class="actions">
-            <a href="#" class="action">👨‍🏫 Manage Staff</a>
-            <a href="#" class="action">👨‍🎓 Manage Students</a>
-            <a href="#" class="action">🏢 Manage Departments</a>
-            <a href="#" class="action">📚 Manage Subjects</a>
-            <a href="#" class="action">🗓️ Manage Timetable</a>
+
+            <!-- Manage Staff -->
+            <a href="{% url 'manage_staff' %}" class="action">
+                👨‍🏫 Manage Staff
+            </a>
+
+            <!-- Other features will be connected later -->
+            <a href="{% url 'manage_students' %}" class="action">
+                👨‍🎓 Manage Students
+            </a>
+
+            <a href="{% url 'manage_departments' %}" class="action">
+                🏢 Manage Departments
+            </a>
+
+            <a href="#" class="action">
+                📚 Manage Subjects
+            </a>
+
+            <a href="#" class="action">
+                🗓️ Manage Timetable
+            </a>
+
         </div>
 
     </div>
 
 </body>
 </html>
+

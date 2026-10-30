@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Manage Departments | LMS</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #dbeafe, #f5d0fe);
+            padding: 30px;
+            color: #1e293b;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            color: #1e1b4b;
+        }
+
+        .header p {
+            color: #64748b;
+            margin-top: 7px;
+        }
+
+        .back-btn {
+            text-decoration: none;
+            background: #4f46e5;
+            color: white;
+            padding: 11px 18px;
+            border-radius: 9px;
+            font-size: 14px;
+        }
+
+        .back-btn:hover {
+            background: #3730a3;
+        }
+
+        .messages {
+            margin-bottom: 20px;
+        }
+
+        .message {
+            padding: 13px 16px;
+            border-radius: 9px;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .success {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .top-section {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 22px;
+            margin-bottom: 25px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.07);
+        }
+
+        .card h2 {
+            font-size: 19px;
+            margin-bottom: 20px;
+            color: #312e81;
+        }
+
+        .form-group {
+            margin-bottom: 17px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #475569;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            outline: none;
+            font-size: 14px;
+        }
+
+        input:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+        }
+
+        .add-btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: #4f46e5;
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .add-btn:hover {
+            background: #3730a3;
+        }
+
+        .info-card {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .info-card p {
+            color: #64748b;
+            line-height: 1.7;
+            font-size: 14px;
+        }
+
+        .info-number {
+            font-size: 42px;
+            font-weight: bold;
+            color: #4f46e5;
+            margin-bottom: 8px;
+        }
+
+        .table-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.07);
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .table-header h2 {
+            color: #312e81;
+            font-size: 20px;
+        }
+
+        .search-box {
+            max-width: 260px;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 650px;
+        }
+
+        th {
+            background: #eef2ff;
+            color: #3730a3;
+            padding: 15px;
+            text-align: left;
+            font-size: 13px;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 14px;
+        }
+
+        tr:hover {
+            background: #f8fafc;
+        }
+
+        .dept-badge {
+            background: #e0e7ff;
+            color: #3730a3;
+            padding: 7px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 12px;
+        }
+
+        .subject-count {
+            background: #dcfce7;
+            color: #166534;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .edit-btn,
+        .delete-btn {
+            border: none;
+            padding: 8px 12px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .edit-btn {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .delete-btn {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .edit-btn:hover {
+            background: #bfdbfe;
+        }
+
+        .delete-btn:hover {
+            background: #fecaca;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 30px;
+            color: #64748b;
+        }
+
+        @media(max-width: 750px) {
+            body {
+                padding: 15px;
+            }
+
+            .top-section {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 23px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- HEADER -->
+    <div class="header">
+        <div>
+            <h1>Manage Departments</h1>
+            <p>Manage and organize your institution's departments.</p>
+        </div>
+
+        <a href="{% url 'admin_dashboard' %}" class="back-btn">
+            ← Back to Dashboard
+        </a>
+    </div>
+
+
+    <!-- DJANGO MESSAGES -->
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+            <div class="message {{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+
+    <!-- TOP SECTION -->
+    <div class="top-section">
+
+        <!-- ADD DEPARTMENT -->
+        <div class="card">
+            <h2>＋ Add New Department</h2>
+
+            <form method="POST" action="{% url 'manage_departments' %}">
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label>Department Name</label>
+
+                    <input
+                        type="text"
+                        name="dept_name"
+                        placeholder="Enter department name"
+                        required
+                    >
+                </div>
+
+                <button type="submit" class="add-btn">
+                    Add Department
+                </button>
+            </form>
+        </div>
+
+
+        <!-- INFORMATION CARD -->
+        <div class="card info-card">
+            <div class="info-number">{{ department_data|length }}</div>
+
+            <h2>Total Departments</h2>
+
+            <p>
+                View and manage all academic departments.
+                You can add new departments, update existing names,
+                and monitor their subject assignments.
+            </p>
+        </div>
+
+    </div>
+
+
+    <!-- DEPARTMENT TABLE -->
+    <div class="table-card">
+
+        <div class="table-header">
+            <h2>Department List</h2>
+
+            <input
+                type="text"
+                id="searchInput"
+                class="search-box"
+                placeholder="Search department..."
+                onkeyup="searchDepartments()"
+            >
+        </div>
+
+
+        <div class="table-wrapper">
+
+            <table id="departmentTable">
+
+                <thead>
+                    <tr>
+                        <th>S.No</th>
+                        <th>Department</th>
+                        <th>Assigned Subjects</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for item in department_data %}
+
+                    <tr>
+
+                        <td>{{ forloop.counter }}</td>
+
+                        <td>
+                            <span class="dept-badge">
+                                {{ item.department.dept_name }}
+                            </span>
+                        </td>
+
+                        <td>
+                            <span class="subject-count">
+                                {{ item.subject_count }}
+                            </span>
+                        </td>
+
+                        <td>
+                            <div class="actions">
+
+                                <!-- EDIT -->
+                                <button
+                                    type="button"
+                                    class="edit-btn"
+                                    onclick="editDepartment(
+                                        '{{ item.department.id }}',
+                                        '{{ item.department.dept_name|escapejs }}'
+                                    )">
+                                    Edit
+                                </button>
+
+
+                                <!-- DELETE -->
+                                <form
+                                    method="POST"
+                                    action="{% url 'delete_department' item.department.id %}"
+                                    onsubmit="return confirm('Are you sure you want to delete this department?');"
+                                >
+                                    {% csrf_token %}
+
+                                    <button type="submit" class="delete-btn">
+                                        Delete
+                                    </button>
+                                </form>
+
+                            </div>
+                        </td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+                        <td colspan="4" class="empty">
+                            No departments found.
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- EDIT DEPARTMENT MODAL -->
+<div id="editModal" style="
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(15,23,42,0.55);
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+">
+
+    <div style="
+        background:white;
+        padding:28px;
+        border-radius:15px;
+        width:100%;
+        max-width:400px;
+        box-shadow:0 10px 30px rgba(0,0,0,0.2);
+    ">
+
+        <h2 style="margin-bottom:20px;color:#312e81;">
+            Edit Department
+        </h2>
+
+        <form id="editForm" method="POST">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label>Department Name</label>
+
+                <input
+                    type="text"
+                    id="editDeptName"
+                    name="dept_name"
+                    required
+                >
+            </div>
+
+            <button type="submit" class="add-btn">
+                Update Department
+            </button>
+
+            <button
+                type="button"
+                onclick="closeEditModal()"
+                style="
+                    width:100%;
+                    padding:11px;
+                    margin-top:10px;
+                    border:none;
+                    border-radius:8px;
+                    background:#e2e8f0;
+                    cursor:pointer;
+                "
+            >
+                Cancel
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    // SEARCH DEPARTMENTS
+    function searchDepartments() {
+
+        let input = document.getElementById("searchInput");
+        let filter = input.value.toLowerCase();
+
+        let table = document.getElementById("departmentTable");
+        let rows = table.getElementsByTagName("tr");
+
+        for (let i = 1; i < rows.length; i++) {
+
+            let department = rows[i].getElementsByTagName("td")[1];
+
+            if (department) {
+
+                let text = department.textContent.toLowerCase();
+
+                rows[i].style.display =
+                    text.includes(filter) ? "" : "none";
+            }
+        }
+    }
+
+
+    // OPEN EDIT MODAL
+    function editDepartment(id, name) {
+
+        document.getElementById("editDeptName").value = name;
+
+        let url = "{% url 'edit_department' 0 %}";
+        document.getElementById("editForm").action = url.replace("0", id);
+
+        document.getElementById("editModal").style.display = "flex";
+    }
+
+
+    // CLOSE EDIT MODAL
+    function closeEditModal() {
+
+        document.getElementById("editModal").style.display = "none";
+    }
+
+</script>
+
+</body>
+</html>

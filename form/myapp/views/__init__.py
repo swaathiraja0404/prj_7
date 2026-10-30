@@ -2,6 +2,9 @@ from .stu_personal import Student_personal_info
 from .staff_personal import staff_personal_info
 from .login import log
 from .staff_dash import staff_dashboard,add_student_marks,staff_change_password,staff_logout,year_subject_view
-from .student_dash import student_dashboard,student_change_password
+from .student_dash import student_dashboard,student_change_password,student_logout
 from .admin_login import admin_login
 from .admin_dash import admin_dashboard,admin_logout
+from .manage_staff import manage_staff,delete_staff
+from .manage_stud import manage_students,delete_student
+from .manage_departments import manage_departments,edit_department,delete_department
