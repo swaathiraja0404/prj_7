@@ -7,7 +7,6 @@ from django.db import transaction
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password
 
-
 def staff_personal_info(request):
     if request.method == "POST":
         form = StaffPersonal(request.POST, request.FILES)

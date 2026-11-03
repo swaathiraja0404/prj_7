@@ -8,3 +8,5 @@ from .admin_dash import admin_dashboard,admin_logout
 from .manage_staff import manage_staff,delete_staff
 from .manage_stud import manage_students,delete_student
 from .manage_departments import manage_departments,edit_department,delete_department
+from .manage_subjects import manage_subjects
+from .manage_timetable import manage_timetable

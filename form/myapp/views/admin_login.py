@@ -3,6 +3,9 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from ..models import UserAuth
 
+def admin_logout(request):
+    request.session.flush()
+    return redirect('admin_login')
 
 def admin_login(request):
     if request.method == "POST":
