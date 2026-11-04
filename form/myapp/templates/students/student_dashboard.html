@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,6 +14,11 @@
     padding: 0;
     box-sizing: border-box;
     font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 25px;
 }
 
 body {
@@ -34,17 +40,36 @@ a {
 /* SIDEBAR */
 
 .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 255px;
+    height: 100vh;
     background: linear-gradient(180deg, #28245c, #5942a9);
     color: white;
     padding: 30px 18px;
+    overflow-y: auto;
+    overflow-x: hidden;
     flex-shrink: 0;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar::-webkit-scrollbar {
+    width: 4px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.25);
+    border-radius: 10px;
 }
 
 .logo {
     font-size: 23px;
     font-weight: 800;
     padding: 0 12px 40px;
+    white-space: nowrap;
 }
 
 .logo span {
@@ -82,8 +107,10 @@ a {
     font-size: 19px;
 }
 
+/* SIDEBAR PROFILE */
+
 .sidebar-bottom {
-    margin-top: 70px;
+    margin-top: auto;
     padding: 18px 10px;
     border-top: 1px solid rgba(255,255,255,0.2);
 }
@@ -105,6 +132,7 @@ a {
     justify-content: center;
     font-size: 19px;
     font-weight: bold;
+    flex-shrink: 0;
 }
 
 .student-profile p {
@@ -123,6 +151,7 @@ a {
 .main-content {
     flex: 1;
     min-width: 0;
+    margin-left: 255px;
     padding: 30px 38px;
 }
 
@@ -161,11 +190,6 @@ a {
     font-weight: bold;
     transition: 0.3s;
     white-space: nowrap;
-}
-
-.change-password {
-    background: #e0f2fe;
-    color: #0369a1;
 }
 
 .logout {
@@ -257,6 +281,7 @@ a {
     border: 1px solid #eeedf5;
     box-shadow: 0 4px 15px rgba(40,36,92,0.04);
     transition: 0.3s;
+    min-width: 0;
 }
 
 .stat:hover {
@@ -302,6 +327,7 @@ a {
 .stat h3 {
     font-size: 27px;
     color: #28245c;
+    overflow-wrap: anywhere;
 }
 
 .stat p {
@@ -553,6 +579,8 @@ footer {
     }
 }
 
+/* TABLET AND MOBILE */
+
 @media(max-width: 700px) {
 
     .layout {
@@ -560,8 +588,12 @@ footer {
     }
 
     .sidebar {
+        position: relative;
         width: 100%;
+        height: auto;
+        min-height: auto;
         padding: 20px;
+        overflow: visible;
     }
 
     .logo {
@@ -585,6 +617,7 @@ footer {
     }
 
     .main-content {
+        margin-left: 0;
         padding: 20px 15px;
     }
 
@@ -629,7 +662,6 @@ footer {
         padding: 10px 12px;
         font-size: 11px;
     }
-
 }
 
 </style>
@@ -671,13 +703,21 @@ footer {
                 <span>📅</span> My Timetable
             </a>
 
+            <!-- CHANGE PASSWORD ADDED TO SIDEBAR -->
+
+            <a href="{% url 'student_change_password' %}" class="nav-link">
+                <span>🔐</span> Change Password
+            </a>
+
         </nav>
 
         <div class="sidebar-bottom">
 
             <div class="student-profile">
 
-                <div class="avatar">S</div>
+                <div class="avatar">
+                    {{ student.name|first|upper }}
+                </div>
 
                 <div>
                     <p>{{ student.name }}</p>
@@ -689,7 +729,6 @@ footer {
         </div>
 
     </aside>
-
 
     <!-- MAIN CONTENT -->
 
@@ -706,13 +745,7 @@ footer {
 
             <div class="nav-buttons">
 
-                <a href="{% url 'student_change_password' %}"
-                   class="nav-btn change-password">
-                    🔐 Change Password
-                </a>
-
-                <a href="{% url 'log' %}"
-                   class="nav-btn logout">
+                <a href="{% url 'log' %}" class="nav-btn logout">
                     ↪ Logout
                 </a>
 
@@ -720,6 +753,7 @@ footer {
 
         </header>
 
+        <!-- DJANGO MESSAGES -->
 
         {% if messages %}
 
@@ -737,7 +771,6 @@ footer {
 
         {% endif %}
 
-
         <!-- WELCOME -->
 
         <section class="welcome">
@@ -754,7 +787,6 @@ footer {
             </span>
 
         </section>
-
 
         <!-- STATISTICS -->
 
@@ -781,7 +813,6 @@ footer {
 
             </div>
 
-
             <div class="stat">
 
                 <div class="stat-top">
@@ -803,7 +834,6 @@ footer {
 
             </div>
 
-
             <div class="stat">
 
                 <div class="stat-top">
@@ -818,7 +848,6 @@ footer {
             </div>
 
         </section>
-
 
         <!-- PROFILE -->
 
@@ -851,7 +880,6 @@ footer {
 
                     </div>
 
-
                     <div>
 
                         <div class="info-item">
@@ -874,7 +902,6 @@ footer {
                         </div>
 
                     </div>
-
 
                     <div>
 
@@ -905,7 +932,6 @@ footer {
             </div>
 
         </section>
-
 
         <!-- SUBJECTS -->
 
@@ -972,7 +998,6 @@ footer {
             </div>
 
         </section>
-
 
         <!-- MARKS -->
 
@@ -1046,7 +1071,6 @@ footer {
 
         </section>
 
-
         <!-- TIMETABLE -->
 
         <section class="section" id="timetable">
@@ -1089,9 +1113,7 @@ footer {
                                 <th>Time</th>
 
                                 {% for day in days %}
-
                                     <th>{{ day }}</th>
-
                                 {% endfor %}
 
                             </tr>
@@ -1159,7 +1181,6 @@ footer {
             </div>
 
         </section>
-
 
         <!-- FOOTER -->
 

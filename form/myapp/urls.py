@@ -1,5 +1,5 @@
 from  django.urls import path
-from .views import Student_personal_info, staff_personal_info, log, staff_dashboard, add_student_marks,staff_change_password,staff_logout,year_subject_view,student_dashboard,student_change_password,admin_login,admin_dashboard,admin_logout,manage_staff, delete_staff,manage_students,delete_student,manage_departments,edit_department,delete_department,manage_subjects,manage_timetable,admin_logout
+from .views import Student_personal_info, staff_personal_info, log, staff_dashboard, add_student_marks,staff_change_password,staff_logout,year_subject_view,student_dashboard,student_change_password,admin_login,admin_dashboard,admin_logout,manage_staff, delete_staff,manage_students,delete_student,manage_departments,edit_department,delete_department,manage_subjects,manage_timetable,admin_logout,admin_change_password
 urlpatterns = [    
     path('info/',Student_personal_info,name="Student_personal_info"),
     path("staff/",staff_personal_info,name="staff_personal_info"),
@@ -25,5 +25,5 @@ urlpatterns = [
     path('manage-subjects/', manage_subjects, name='manage_subjects'),
     path('manage-timetable/',manage_timetable,name='manage_timetable'),
     path('admin-logout/', admin_logout,name='admin_logout'),
-
+    path('change-password/',admin_change_password,name='admin_change_password'),
 ]

@@ -1,134 +1,338 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #dbeafe, #f5d0fe);
-            min-height: 100vh;
-            padding: 40px;
-        }
+<title>LMS | Login Portal</title>
 
-        .container {
-            max-width: 900px;
-            margin: auto;
-        }
+<style>
 
-        h1 {
-            text-align: center;
-            color: #312e81;
-            margin-bottom: 25px;
-        }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
 
-         /* .profile-card {
-            background: white;
-            padding: 50px;
-            border-radius: 50px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-            width: 900px;
-        } */
-            .profile-card {
-            background: white;
-            padding: 40px;
-            border-radius: 30px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-            width: 600px;          
-            margin: 0 auto;
-        }
-        
+body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #dbeafe, #f5d0fe);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 25px;
+}
 
-        .info {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 18px;
-        }
+.container {
+    width: 100%;
+    max-width: 850px;
+    text-align: center;
+}
 
-        .info-box {
-            padding: 15px;
-            background: #f8fafc;
-            border-left: 3px solid #6366f1;
-            border-radius: 10px;
-            width: 100%;
-        }
+.logo {
+    font-size: 15px;
+    font-weight: bold;
+    color: #6366f1;
+    letter-spacing: 3px;
+    margin-bottom: 15px;
+}
 
-        .submit-btn {
-            margin-top: 20px;
-            padding: 12px 30px;
-            background: #6366f1;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-        }
+h1 {
+    color: #312e81;
+    font-size: 36px;
+    margin-bottom: 12px;
+}
 
-        .submit-btn:hover {
-            background: #4f46e5;
-        }
+.subtitle {
+    color: #64748b;
+    margin-bottom: 40px;
+}
 
-        @media (max-width: 600px) {
-            .info {
-                grid-template-columns: 1fr;
-            }
+.cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+}
 
-            body {
-                padding: 20px;
-            }
-        .info label {
-            font-weight: bold;
-            color: #312e81;
-            display: block;
-            margin-bottom: 6px;
-            }
-        }
-    </style>
+.login-card {
+    background: white;
+    padding: 40px 25px;
+    border-radius: 25px;
+    box-shadow: 0 12px 30px rgba(49, 46, 129, 0.12);
+    transition: 0.3s;
+}
+
+.login-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 18px 35px rgba(49, 46, 129, 0.2);
+}
+
+.icon {
+    font-size: 55px;
+    margin-bottom: 20px;
+}
+
+.login-card h2 {
+    color: #312e81;
+    margin-bottom: 12px;
+}
+
+.login-card p {
+    color: #64748b;
+    margin-bottom: 25px;
+}
+
+.login-btn {
+    display: inline-block;
+    text-decoration: none;
+    background: #6366f1;
+    color: white;
+    padding: 13px 30px;
+    border-radius: 10px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.login-btn:hover {
+    background: #4f46e5;
+}
+
+.form-card {
+    background: white;
+    max-width: 450px;
+    margin: auto;
+    padding: 40px;
+    border-radius: 25px;
+    box-shadow: 0 12px 30px rgba(49, 46, 129, 0.15);
+}
+
+.form-card h2 {
+    color: #312e81;
+    margin-bottom: 25px;
+}
+
+.input-group {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    display: block;
+    color: #312e81;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    outline: none;
+    font-size: 15px;
+}
+
+.input-group input:focus {
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99,102,241,0.12);
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    background: #6366f1;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.submit-btn:hover {
+    background: #4f46e5;
+}
+
+.back-btn {
+    display: inline-block;
+    margin-top: 22px;
+    color: #6366f1;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.message {
+    background: #fee2e2;
+    color: #b91c1c;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 18px;
+}
+
+.footer {
+    margin-top: 35px;
+    color: #64748b;
+    font-size: 13px;
+}
+
+@media(max-width: 600px) {
+
+    .cards {
+        grid-template-columns: 1fr;
+    }
+
+    h1 {
+        font-size: 28px;
+    }
+
+    .form-card {
+        padding: 25px;
+    }
+
+}
+
+</style>
 </head>
 
 <body>
 
 <div class="container">
 
-    <h1>Login page</h1>
+    <div class="logo">LMS PORTAL</div>
 
-    <div class="profile-card">
+    {% if selected_role == "Student" or selected_role == "Staff" %}
 
-        <form method="post">
-            {% csrf_token %}
+        <h1>
+            {% if selected_role == "Student" %}
+                Student Login
+            {% else %}
+                Staff Login
+            {% endif %}
+        </h1>
 
+        <p class="subtitle">
+            Welcome back! Please login to continue.
+        </p>
 
-            <div class="info">
+        <div class="form-card">
 
-                <!-- <label>User ID:</label><br>
-                {{ form.user_id }}
-                <br><br> -->
+            <h2>
+                {{ selected_role }} Portal
+            </h2>
 
-                <label>Role:</label><br>
-                {{ form.role }}
-                <br><br>
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="message">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
 
-                <label>Username:</label><br>
-                {{ form.username }}
-                <br><br>
+            <form method="POST">
 
-                <label>Password:</label><br>
-                {{ form.password }}
-                <br><br>
+                {% csrf_token %}
+
+                <input type="hidden" name="role" value="{{ selected_role }}">
+
+                <div class="input-group">
+
+                    <label>Username</label>
+
+                    <input
+                        type="text"
+                        name="username"
+                        placeholder="Enter your username"
+                        required
+                    >
+
+                </div>
+
+                <div class="input-group">
+
+                    <label>Password</label>
+
+                    <input
+                        type="password"
+                        name="password"
+                        placeholder="Enter your password"
+                        required
+                    >
+
+                </div>
+
+                <button type="submit" class="submit-btn">
+                    Login
+                </button>
+
+            </form>
+
+            <a href="{% url 'log' %}" class="back-btn">
+                ← Back to Login Portal
+            </a>
+
+        </div>
+
+    {% else %}
+
+        <h1>Choose your login portal to continue</h1>
+
+        <p class="subtitle">
+            
+        </p>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="message">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="cards">
+
+            <div class="login-card">
+
+                <div class="icon">🎓</div>
+
+                <h2>Student</h2>
+
+                <p>
+                    Access your academic details,
+                    marks and timetable.
+                </p>
+
+                <a href="{% url 'log' %}?role=Student"
+                   class="login-btn">
+                    Student Login →
+                </a>
 
             </div>
 
+            <div class="login-card">
 
+                <div class="icon">👨‍🏫</div>
 
-            <button type="submit" class="submit-btn">
-                Submit
-            </button>
+                <h2>Staff</h2>
 
-        </form>
+                <p>
+                    Manage students, marks
+                    and academic activities.
+                </p>
 
+                <a href="{% url 'log' %}?role=Staff"
+                   class="login-btn">
+                    Staff Login →
+                </a>
+
+            </div>
+
+        </div>
+
+    {% endif %}
+
+    <div class="footer">
+        © 2026 Learning Management System | All Rights Reserved
     </div>
 
 </div>

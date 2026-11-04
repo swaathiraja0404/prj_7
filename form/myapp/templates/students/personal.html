@@ -1,150 +1,671 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Add Student | LMS Admin</title>
+
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: "Segoe UI", Arial, sans-serif;
         }
 
         body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #dbeafe, #f5d0fe);
+            background: #f4f5fb;
             min-height: 100vh;
-            padding: 40px;
+            color: #1e293b;
         }
 
-        .container {
-            max-width: 900px;
-            margin: auto;
+        /* SIDEBAR */
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 255px;
+            height: 100vh;
+            background: linear-gradient(180deg, #28245c, #5942a9);
+            color: white;
+            padding: 30px 18px;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            z-index: 1000;
         }
 
-        h1 {
+        .logo {
+            font-size: 23px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            padding-left: 12px;
+        }
+
+        .logo span {
+            color: #c4b5fd;
+        }
+
+        .sidebar-subtitle {
+            font-size: 12px;
+            color: #cbd5e1;
+            padding-left: 12px;
+            margin-bottom: 38px;
+        }
+
+        .menu-title {
+            font-size: 11px;
+            color: #c4b5fd;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            padding-left: 12px;
+            margin-bottom: 12px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            padding: 13px 14px;
+            color: #e2e8f0;
+            text-decoration: none;
+            border-radius: 10px;
+            margin-bottom: 7px;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        .nav-link:hover {
+            background: rgba(255,255,255,0.15);
+            color: white;
+            transform: translateX(4px);
+        }
+
+        .nav-link.active {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            font-weight: 600;
+        }
+
+        .nav-icon {
+            font-size: 18px;
+            width: 23px;
             text-align: center;
+        }
+
+        .sidebar-bottom {
+            margin-top: auto;
+            padding-top: 25px;
+        }
+
+        .admin-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px 10px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .profile-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #c4b5fd;
             color: #312e81;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 800;
+            font-size: 17px;
+        }
+
+        .profile-info h4 {
+            font-size: 13px;
+            margin-bottom: 3px;
+        }
+
+        .profile-info p {
+            font-size: 11px;
+            color: #cbd5e1;
+        }
+
+        /* MAIN CONTENT */
+
+        .main-content {
+            margin-left: 255px;
+            padding: 32px 38px;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 28px;
+        }
+
+        .page-heading h1 {
+            font-size: 28px;
+            color: #1e1b4b;
+            margin-bottom: 7px;
+        }
+
+        .page-heading p {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 18px;
+            background: white;
+            color: #475569;
+            border: 1px solid #e2e8f0;
+            border-radius: 9px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .back-button:hover {
+            background: #f1f5f9;
+        }
+
+        /* FORM CARD */
+
+        .form-card {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 18px rgba(15, 23, 42, 0.04);
+            border: 1px solid #edf0f7;
+            max-width: 1000px;
+        }
+
+        .form-heading {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding-bottom: 22px;
             margin-bottom: 25px;
+            border-bottom: 1px solid #e2e8f0;
         }
 
-         /* .profile-card {
-            background: white;
-            padding: 50px;
-            border-radius: 50px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-            width: 900px;
-        } */
-            .profile-card {
-            background: white;
-            padding: 40px;
-            border-radius: 30px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-
-            width: 600px;          
-            margin: 0 auto;
+        .form-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 13px;
+            background: #ede9fe;
+            color: #5b21b6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 25px;
         }
-        
+
+        .form-heading h2 {
+            font-size: 19px;
+            color: #1e1b4b;
+            margin-bottom: 5px;
+        }
+
+        .form-heading p {
+            font-size: 13px;
+            color: #64748b;
+        }
+
+        /* FORM GRID */
 
         .info {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 18px;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 22px;
         }
 
-        .info-box {
-            padding: 15px;
-            background: #f8fafc;
-            border-left: 3px solid #6366f1;
-            border-radius: 10px;
+        .form-group {
             width: 100%;
         }
 
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 650;
+            color: #334155;
+            margin-bottom: 9px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 13px 14px;
+            border: 1px solid #dbe1ec;
+            border-radius: 9px;
+            outline: none;
+            font-size: 13px;
+            color: #334155;
+            background: #f8fafc;
+            transition: 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #7c3aed;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+        }
+
+        .form-group input::placeholder {
+            color: #94a3b8;
+        }
+
+        /* VALIDATION ERRORS */
+
+        .errorlist {
+            list-style: none;
+            color: #dc2626;
+            font-size: 12px;
+            margin-top: 7px;
+        }
+
+        .field-errors {
+            color: #dc2626;
+            font-size: 12px;
+            margin-top: 7px;
+        }
+
+        .form-errors {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 13px 16px;
+            border-radius: 9px;
+            margin-bottom: 20px;
+            font-size: 13px;
+        }
+
+        /* FORM BUTTONS */
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 30px;
+            padding-top: 22px;
+            border-top: 1px solid #e2e8f0;
+        }
+
         .submit-btn {
-            margin-top: 20px;
-            padding: 12px 30px;
-            background: #6366f1;
+            padding: 13px 25px;
+            background: linear-gradient(135deg, #5543b5, #7c3aed);
             color: white;
             border: none;
-            border-radius: 10px;
+            border-radius: 9px;
             cursor: pointer;
+            font-size: 13px;
+            font-weight: 650;
+            transition: 0.3s;
         }
 
         .submit-btn:hover {
-            background: #4f46e5;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 14px rgba(91, 63, 190, 0.25);
         }
 
-        @media (max-width: 600px) {
+        .cancel-btn {
+            padding: 13px 25px;
+            background: #f1f5f9;
+            color: #475569;
+            border: none;
+            border-radius: 9px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .cancel-btn:hover {
+            background: #e2e8f0;
+        }
+
+        /* RESPONSIVE */
+
+        @media(max-width: 900px) {
+
+            .sidebar {
+                width: 220px;
+            }
+
+            .main-content {
+                margin-left: 220px;
+                padding: 25px;
+            }
+        }
+
+        @media(max-width: 650px) {
+
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+                overflow: visible;
+            }
+
+            .sidebar-bottom {
+                margin-top: 15px;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 20px 15px;
+            }
+
             .info {
                 grid-template-columns: 1fr;
             }
 
-            body {
-                padding: 20px;
+            .form-card {
+                padding: 20px 16px;
             }
-        .info label {
-            font-weight: bold;
-            color: #312e81;
-            display: block;
-            margin-bottom: 6px;
+
+            .page-heading h1 {
+                font-size: 23px;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+
+            .submit-btn,
+            .cancel-btn {
+                width: 100%;
+                justify-content: center;
+                text-align: center;
             }
         }
+
     </style>
 </head>
 
 <body>
 
-<div class="container">
+    <!-- SIDEBAR -->
 
-    <h1>Student Personal Information</h1>
+    <aside class="sidebar">
 
-    <div class="profile-card">
+        <div>
 
-        <form method="post">
-            {% csrf_token %}
+            <div class="logo">
+            🎓 LMS<span></span>
+            </div>
 
-            <div class="info">
-            
-                    <label>Name:</label><br>
-                    {{ form.name }}
-                    <br><br>
+            <div class="sidebar-subtitle">
+                Learning Management System
+            </div>
 
-                    <label>Age:</label><br>
-                    {{ form.age }}
-                    <br><br>
+            <div class="menu-title">
+                Main Menu
+            </div>
 
-                    <label>DOB:</label><br>
-                    {{ form.dod }}
-                    <br><br>
+            <a href="{% url 'admin_dashboard' %}" class="nav-link">
+                <span class="nav-icon">▦</span>
+                Dashboard
+            </a>
 
-                    <label>Phone:</label><br>
-                    {{ form.phone }}
-                    <br><br>
+            <a href="{% url 'manage_staff' %}" class="nav-link">
+                <span class="nav-icon">👨‍🏫</span>
+                Manage Staff
+            </a>
 
-                    <label>Email:</label><br>
-                    {{ form.email }}
-                    <br><br>
-                    <label>Department:</label><br>
-                    {{ form.department }}
-                    <br><br>
-                    <label>Admission Date:</label><br>
-                    {{ form.admission_date }}
-                    {{ form.admission_date.errors }}
-                    <br><br>
-                    <label>Year:</label><br>
-                    {{ form.year }}
-                    <!-- {{ form.admission_date.errors }} -->
-                    <br><br>
+            <a href="{% url 'manage_students' %}" class="nav-link active">
+                <span class="nav-icon">🎓</span>
+                Manage Students
+            </a>
+
+            <a href="{% url 'manage_departments' %}" class="nav-link">
+                <span class="nav-icon">🏢</span>
+                Departments
+            </a>
+
+            <a href="{% url 'manage_subjects' %}" class="nav-link">
+                <span class="nav-icon">📚</span>
+                Manage Subjects
+            </a>
+
+            <a href="{% url 'manage_timetable' %}" class="nav-link">
+                <span class="nav-icon">📅</span>
+                Timetable
+            </a>
+
+        </div>
+
+        <div class="sidebar-bottom">
+
+            <div class="admin-profile">
+
+                <div class="profile-avatar">
+                    A
+                </div>
+
+                <div class="profile-info">
+                    <h4>Administrator</h4>
+                    <p>System Admin</p>
+                </div>
 
             </div>
 
-            <button type="submit" class="submit-btn">
-                Submit
-            </button>
+            <a href="{% url 'admin_logout' %}" class="nav-link">
+                <span class="nav-icon">↪</span>
+                Logout
+            </a>
 
-        </form>
+        </div>
 
-    </div>
+    </aside>
 
-</div>
+
+    <!-- MAIN CONTENT -->
+
+    <main class="main-content">
+
+        <!-- HEADER -->
+
+        <div class="topbar">
+
+            <div class="page-heading">
+                <h1>Add New Student</h1>
+                <p>Register a new student and maintain their academic information.</p>
+            </div>
+
+            <a href="{% url 'manage_students' %}" class="back-button">
+                ← Back to Students
+            </a>
+
+        </div>
+
+
+        <!-- FORM CARD -->
+
+        <div class="form-card">
+
+            <div class="form-heading">
+
+                <div class="form-icon">
+                    🎓
+                </div>
+
+                <div>
+                    <h2>Student Personal Information</h2>
+                    <p>Enter the student's personal and academic details below.</p>
+                </div>
+
+            </div>
+
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                    <div class="form-errors">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+
+
+                <div class="info">
+
+                    <div class="form-group">
+
+                        <label for="{{ form.name.id_for_label }}">
+                            Student Name
+                        </label>
+
+                        {{ form.name }}
+
+                        <div class="field-errors">
+                            {{ form.name.errors }}
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="{{ form.age.id_for_label }}">
+                            Age
+                        </label>
+
+                        {{ form.age }}
+
+                        <div class="field-errors">
+                            {{ form.age.errors }}
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="{{ form.dod.id_for_label }}">
+                            Date of Birth
+                        </label>
+
+                        {{ form.dod }}
+
+                        <div class="field-errors">
+                            {{ form.dod.errors }}
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="{{ form.phone.id_for_label }}">
+                            Phone Number
+                        </label>
+
+                        {{ form.phone }}
+
+                        <div class="field-errors">
+                            {{ form.phone.errors }}
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="{{ form.email.id_for_label }}">
+                            Email Address
+                        </label>
+
+                        {{ form.email }}
+
+                        <div class="field-errors">
+                            {{ form.email.errors }}
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="{{ form.department.id_for_label }}">
+                            Department
+                        </label>
+
+                        {{ form.department }}
+
+                        <div class="field-errors">
+                            {{ form.department.errors }}
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="{{ form.admission_date.id_for_label }}">
+                            Admission Date
+                        </label>
+
+                        {{ form.admission_date }}
+
+                        <div class="field-errors">
+                            {{ form.admission_date.errors }}
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="{{ form.year.id_for_label }}">
+                            Academic Year
+                        </label>
+
+                        {{ form.year }}
+
+                        <div class="field-errors">
+                            {{ form.year.errors }}
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- BUTTONS -->
+
+                <div class="form-actions">
+
+                    <a href="{% url 'manage_students' %}" class="cancel-btn">
+                        Cancel
+                    </a>
+
+                    <button type="submit" class="submit-btn">
+                        + Register Student
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </main>
 
 </body>
 </html>

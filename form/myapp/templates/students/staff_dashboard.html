@@ -1,1197 +1,1022 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Staff Dashboard | CampusFlow LMS</title>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
-          rel="stylesheet">
-
-    <style>
-        :root {
-            --primary: #4f46e5;
-            --primary-dark: #3730a3;
-            --primary-light: #eef2ff;
-            --navy: #172554;
-            --sidebar: #111c3a;
-            --sidebar-muted: #a5b4d4;
-            --background: #f4f6fc;
-            --white: #ffffff;
-            --text: #172033;
-            --muted: #7b849b;
-            --border: #e8ebf4;
-            --green: #059669;
-            --orange: #d97706;
-            --red: #dc2626;
-            --radius: 18px;
-            --shadow: 0 8px 30px rgba(29, 45, 90, 0.05);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-            scroll-padding-top: 25px;
-        }
-
-        body {
-            font-family: "Inter", Arial, sans-serif;
-            background: var(--background);
-            color: var(--text);
-            min-height: 100vh;
-        }
-
-        a {
-            text-decoration: none;
-        }
-
-        button,
-        input,
-        select {
-            font: inherit;
-        }
-
-        button,
-        select {
-            cursor: pointer;
-        }
-
-        /* MAIN LAYOUT */
-
-        .app-layout {
-            display: flex;
-            min-height: 100vh;
-        }
-
-        /* SIDEBAR */
-
-        .sidebar {
-            width: 255px;
-            background: var(--sidebar);
-            color: white;
-            position: fixed;
-            inset: 0 auto 0 0;
-            display: flex;
-            flex-direction: column;
-            padding: 27px 17px 20px;
-            z-index: 1000;
-            overflow-y: auto;
-            transition: transform 0.3s ease;
-        }
-
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 0 10px 30px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .brand-logo {
-            width: 43px;
-            height: 43px;
-            border-radius: 14px;
-            display: grid;
-            place-items: center;
-            background: linear-gradient(135deg, #818cf8, #4f46e5);
-            font-size: 22px;
-            font-weight: 800;
-            box-shadow: 0 5px 20px rgba(79,70,229,0.35);
-        }
-
-        .brand-name {
-            font-size: 18px;
-            font-weight: 800;
-            letter-spacing: -0.6px;
-        }
-
-        .brand-caption {
-            font-size: 10px;
-            color: #a5b4d4;
-            margin-top: 5px;
-            letter-spacing: 1.5px;
-        }
-
-        .nav-heading {
-            font-size: 10px;
-            font-weight: 700;
-            color: #7f8eaf;
-            letter-spacing: 1.6px;
-            padding: 27px 12px 12px;
-            text-transform: uppercase;
-        }
-
-        .nav-menu {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .nav-link {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 13px 14px;
-            border-radius: 11px;
-            color: var(--sidebar-muted);
-            font-size: 13px;
-            font-weight: 500;
-            transition: 0.25s;
-        }
-
-        .nav-link:hover,
-        .nav-link.active {
-            background: linear-gradient(
-                100deg,
-                rgba(99,102,241,0.28),
-                rgba(79,70,229,0.12)
-            );
-            color: white;
-        }
-
-        .nav-link.active {
-            border-left: 3px solid #818cf8;
-            padding-left: 11px;
-        }
-
-        .nav-icon {
-            width: 22px;
-            text-align: center;
-            font-size: 17px;
-        }
-
-        .sidebar-bottom {
-            margin-top: auto;
-            padding-top: 25px;
-        }
-
-        .sidebar-profile {
-            display: flex;
-            align-items: center;
-            gap: 11px;
-            padding: 15px 10px;
-            margin-top: 15px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .avatar {
-            width: 39px;
-            height: 39px;
-            border-radius: 13px;
-            display: grid;
-            place-items: center;
-            flex-shrink: 0;
-            font-weight: 800;
-            color: white;
-            background: linear-gradient(135deg, #a78bfa, #6366f1);
-        }
-
-        .profile-name {
-            font-size: 12px;
-            font-weight: 700;
-            color: white;
-            overflow-wrap: anywhere;
-        }
-
-        .profile-role {
-            font-size: 10px;
-            color: #a5b4d4;
-            margin-top: 5px;
-        }
-
-        /* MAIN CONTENT */
-
-        .main-content {
-            width: calc(100% - 255px);
-            margin-left: 255px;
-            min-width: 0;
-        }
-
-        .topbar {
-            height: 83px;
-            background: rgba(255,255,255,0.92);
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 18px;
-            padding: 0 35px;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            backdrop-filter: blur(12px);
-        }
-
-        .topbar-left {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            min-width: 0;
-        }
-
-        .menu-toggle {
-            display: none;
-            border: none;
-            background: var(--primary-light);
-            color: var(--primary);
-            width: 39px;
-            height: 39px;
-            border-radius: 10px;
-            font-size: 21px;
-        }
-
-        .breadcrumb {
-            color: var(--muted);
-            font-size: 11px;
-            margin-bottom: 5px;
-        }
-
-        .topbar-title {
-            font-size: 18px;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-        }
-
-        .topbar-right {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .department-badge {
-            background: #ecfdf5;
-            color: #047857;
-            padding: 9px 13px;
-            border-radius: 9px;
-            font-size: 11px;
-            font-weight: 800;
-            border: 1px solid #d1fae5;
-        }
-
-        .header-date {
-            font-size: 11px;
-            color: var(--muted);
-            white-space: nowrap;
-        }
-
-        .page-content {
-            max-width: 1600px;
-            margin: auto;
-            padding: 32px 35px 40px;
-        }
-
-        /* WELCOME BANNER */
-
-        .welcome-banner {
-            position: relative;
-            overflow: hidden;
-            border-radius: 22px;
-            padding: 31px 34px;
-            color: white;
-            background: linear-gradient(115deg, #312e81 0%, #4f46e5 58%, #818cf8 100%);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 25px;
-            box-shadow: 0 12px 35px rgba(79,70,229,0.18);
-        }
-
-        .welcome-banner::before {
-            content: "";
-            position: absolute;
-            width: 250px;
-            height: 250px;
-            border: 40px solid rgba(255,255,255,0.07);
-            border-radius: 50%;
-            right: 90px;
-            top: -140px;
-        }
-
-        .welcome-banner::after {
-            content: "";
-            position: absolute;
-            width: 170px;
-            height: 170px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.06);
-            right: -35px;
-            bottom: -95px;
-        }
-
-        .welcome-content,
-        .welcome-side {
-            position: relative;
-            z-index: 1;
-        }
-
-        .welcome-label {
-            display: inline-flex;
-            align-items: center;
-            gap: 7px;
-            font-size: 10px;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            font-weight: 700;
-            color: #ddd6fe;
-            margin-bottom: 13px;
-        }
-
-        .welcome-title {
-            font-size: clamp(23px, 3vw, 32px);
-            line-height: 1.3;
-            font-weight: 800;
-            letter-spacing: -1px;
-        }
-
-        .welcome-title span {
-            color: #c7d2fe;
-        }
-
-        .welcome-description {
-            margin-top: 12px;
-            max-width: 560px;
-            line-height: 1.8;
-            color: #e0e7ff;
-            font-size: 12px;
-        }
-
-        .welcome-side {
-            min-width: 155px;
-            text-align: right;
-        }
-
-        .welcome-date {
-            font-size: 11px;
-            color: #e0e7ff;
-            margin-bottom: 9px;
-        }
-
-        .welcome-department {
-            display: inline-block;
-            padding: 10px 15px;
-            border: 1px solid rgba(255,255,255,0.25);
-            background: rgba(255,255,255,0.12);
-            border-radius: 11px;
-            font-size: 12px;
-            font-weight: 700;
-        }
-
-        /* SECTION HEADINGS */
-
-        .section-heading {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
-            margin: 32px 0 18px;
-        }
-
-        .section-title {
-            font-size: 17px;
-            font-weight: 800;
-            letter-spacing: -0.4px;
-        }
-
-        .section-subtitle {
-            color: var(--muted);
-            font-size: 11px;
-            line-height: 1.7;
-            margin-top: 6px;
-        }
-
-        .section-tag {
-            background: white;
-            border: 1px solid var(--border);
-            border-radius: 9px;
-            padding: 9px 12px;
-            color: var(--muted);
-            font-size: 11px;
-        }
-
-        /* STATISTICS */
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 19px;
-        }
-
-        .stat-card {
-            background: white;
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 23px;
-            box-shadow: var(--shadow);
-            transition: transform 0.25s, box-shadow 0.25s;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 14px 35px rgba(29,45,90,0.09);
-        }
-
-        .stat-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .stat-label {
-            font-size: 11px;
-            color: var(--muted);
-            font-weight: 600;
-        }
-
-        .stat-icon {
-            width: 43px;
-            height: 43px;
-            display: grid;
-            place-items: center;
-            border-radius: 13px;
-            font-size: 20px;
-        }
-
-        .icon-purple {
-            background: #eef2ff;
-            color: #4f46e5;
-        }
-
-        .icon-green {
-            background: #ecfdf5;
-            color: #059669;
-        }
-
-        .icon-orange {
-            background: #fff7ed;
-            color: #ea580c;
-        }
-
-        .stat-value {
-            margin-top: 20px;
-            font-size: 33px;
-            font-weight: 800;
-            letter-spacing: -1px;
-            color: var(--navy);
-            overflow-wrap: anywhere;
-        }
-
-        .stat-description {
-            margin-top: 9px;
-            color: var(--muted);
-            font-size: 10px;
-            line-height: 1.7;
-        }
-
-        /* GENERAL CARDS */
-
-        .panel {
-            background: white;
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            padding: 25px;
-            margin-top: 22px;
-            min-width: 0;
-            scroll-margin-top: 105px;
-        }
-
-        .panel-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            gap: 15px;
-            flex-wrap: wrap;
-            margin-bottom: 22px;
-        }
-
-        .panel-title {
-            font-size: 15px;
-            font-weight: 800;
-        }
-
-        .panel-description {
-            color: var(--muted);
-            font-size: 11px;
-            line-height: 1.8;
-            margin-top: 7px;
-        }
-
-        /* BUTTONS */
-
-        .btn {
-            display: inline-flex;
-            justify-content: center;
-            align-items: center;
-            gap: 7px;
-            padding: 10px 14px;
-            border: 1px solid transparent;
-            border-radius: 9px;
-            font-size: 11px;
-            font-weight: 700;
-            transition: 0.2s;
-            white-space: nowrap;
-        }
-
-        .btn-primary {
-            background: var(--primary);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: var(--primary-dark);
-        }
-
-        .btn-light {
-            background: #f8faff;
-            border-color: var(--border);
-            color: #475569;
-        }
-
-        .btn-light:hover {
-            background: var(--primary-light);
-            color: var(--primary);
-        }
-
-        .btn-danger {
-            background: #fef2f2;
-            color: #b91c1c;
-            border-color: #fee2e2;
-        }
-
-        .btn-danger:hover {
-            background: #fee2e2;
-        }
-
-        /* STUDENT FILTER */
-
-        .filter-bar {
-            display: flex;
-            align-items: flex-end;
-            gap: 13px;
-            flex-wrap: wrap;
-            padding: 17px;
-            margin-bottom: 20px;
-            border: 1px solid #e3e8ff;
-            background: #f8faff;
-            border-radius: 13px;
-        }
-
-        .filter-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .filter-group label {
-            color: #475569;
-            font-size: 10px;
-            font-weight: 700;
-        }
-
-        .filter-control {
-            min-height: 41px;
-            padding: 10px 12px;
-            background: white;
-            border: 1px solid #dfe4f0;
-            border-radius: 8px;
-            color: #334155;
-            font-size: 11px;
-            outline: none;
-        }
-
-        .filter-control:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(79,70,229,0.09);
-        }
-
-        .search-control {
-            width: 240px;
-            max-width: 100%;
-        }
-
-        .year-control {
-            min-width: 190px;
-        }
-
-        .filter-actions {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        /* TABLE */
-
-        .table-container {
-            width: 100%;
-            overflow-x: auto;
-            border: 1px solid var(--border);
-            border-radius: 12px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            min-width: 750px;
-        }
-
-        thead th {
-            padding: 15px 14px;
-            text-align: left;
-            color: #64748b;
-            background: #f8faff;
-            border-bottom: 1px solid var(--border);
-            font-size: 10px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.6px;
-            white-space: nowrap;
-        }
-
-        tbody td {
-            padding: 15px 14px;
-            border-bottom: 1px solid #edf0f6;
-            font-size: 11px;
-            color: #475569;
-            vertical-align: middle;
-        }
-
-        tbody tr:last-child td {
-            border-bottom: none;
-        }
-
-        tbody tr {
-            transition: background 0.2s;
-        }
-
-        tbody tr:hover {
-            background: #fafbff;
-        }
-
-        .student-cell {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            min-width: 150px;
-        }
-
-        .student-avatar {
-            width: 35px;
-            height: 35px;
-            flex-shrink: 0;
-            border-radius: 11px;
-            display: grid;
-            place-items: center;
-            color: #4f46e5;
-            background: #eef2ff;
-            font-size: 12px;
-            font-weight: 800;
-        }
-
-        .student-name {
-            font-weight: 700;
-            color: #1e293b;
-            font-size: 11px;
-        }
-
-        .student-id {
-            margin-top: 5px;
-            font-size: 9px;
-            color: #94a3b8;
-        }
-
-        .email-cell {
-            min-width: 175px;
-            overflow-wrap: anywhere;
-        }
-
-        .marks-button {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: #eef2ff;
-            color: #4338ca;
-            border-radius: 8px;
-            padding: 9px 11px;
-            font-size: 10px;
-            font-weight: 800;
-            white-space: nowrap;
-            transition: 0.2s;
-        }
-
-        .marks-button:hover {
-            background: #4338ca;
-            color: white;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 38px 18px;
-            color: var(--muted);
-        }
-
-        .empty-icon {
-            font-size: 32px;
-            margin-bottom: 12px;
-        }
-
-        .empty-state h3 {
-            color: #334155;
-            font-size: 14px;
-            margin-bottom: 7px;
-        }
-
-        .empty-state p {
-            font-size: 11px;
-            line-height: 1.8;
-        }
-
-        /* SUBJECTS */
-
-        .subject-grid {
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 14px;
-        }
-
-        .subject-card {
-            border: 1px solid var(--border);
-            border-radius: 13px;
-            padding: 18px;
-            background: linear-gradient(145deg, #ffffff, #fafbff);
-            transition: 0.25s;
-        }
-
-        .subject-card:hover {
-            border-color: #c7d2fe;
-            transform: translateY(-3px);
-        }
-
-        .subject-card-top {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 10px;
-        }
-
-        .subject-symbol {
-            width: 38px;
-            height: 38px;
-            display: grid;
-            place-items: center;
-            background: #eef2ff;
-            color: #4f46e5;
-            border-radius: 11px;
-            font-size: 17px;
-        }
-
-        .subject-number {
-            font-size: 10px;
-            color: #94a3b8;
-            font-weight: 700;
-        }
-
-        .subject-code {
-            display: inline-block;
-            color: #4338ca;
-            font-size: 10px;
-            font-weight: 800;
-            margin-top: 16px;
-            background: #eef2ff;
-            padding: 5px 8px;
-            border-radius: 6px;
-        }
-
-        .subject-name {
-            color: #1e293b;
-            font-size: 12px;
-            font-weight: 700;
-            line-height: 1.7;
-            margin-top: 10px;
-            overflow-wrap: anywhere;
-        }
-
-        /* TIMETABLE */
-
-        .timetable-container {
-            overflow-x: auto;
-            width: 100%;
-        }
-
-        .timetable-grid {
-            min-width: 760px;
-            table-layout: auto;
-            text-align: center;
-        }
-
-        .timetable-grid th {
-            text-align: center;
-            background: #eef2ff;
-            color: #4338ca;
-        }
-
-        .timetable-grid td {
-            text-align: center;
-            min-width: 105px;
-            white-space: normal;
-            line-height: 1.6;
-            padding: 15px 9px;
-        }
-
-        .timetable-grid td:first-child {
-            min-width: 145px;
-            color: #334155;
-            background: #f8faff;
-            font-weight: 700;
-            white-space: nowrap;
-        }
-
-        .timetable-grid .break-row td {
-            background: #fff7ed;
-            color: #9a3412;
-            font-weight: 700;
-        }
-
-        .timetable-grid .lunch-row td {
-            background: #ecfdf5;
-            color: #047857;
-            font-weight: 700;
-        }
-
-        .subject-code-label {
-            display: block;
-            color: #4338ca;
-            font-size: 10px;
-            font-weight: 800;
-            margin-bottom: 5px;
-        }
-
-        .subject-name-label {
-            display: block;
-            font-size: 10px;
-            color: #475569;
-        }
-
-        .free-period {
-            color: #c0c7d6;
-            font-size: 10px;
-        }
-
-        /* YEAR MAPPING */
-
-        .mapping-box {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 22px;
-            padding: 23px;
-            border-radius: 15px;
-            background: linear-gradient(115deg, #f5f3ff, #eff6ff);
-            border: 1px solid #e0e7ff;
-        }
-
-        .mapping-left {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            min-width: 0;
-        }
-
-        .mapping-icon {
-            width: 53px;
-            height: 53px;
-            flex-shrink: 0;
-            display: grid;
-            place-items: center;
-            font-size: 25px;
-            border-radius: 15px;
-            background: white;
-            box-shadow: 0 4px 15px rgba(79,70,229,0.08);
-        }
-
-        .mapping-title {
-            font-size: 13px;
-            font-weight: 800;
-            color: #312e81;
-        }
-
-        .mapping-description {
-            color: #64748b;
-            font-size: 10px;
-            line-height: 1.8;
-            margin-top: 7px;
-        }
-
-        /* FOOTER */
-
-        .footer {
-            display: flex;
-            justify-content: space-between;
-            gap: 12px;
-            flex-wrap: wrap;
-            padding-top: 25px;
-            margin-top: 30px;
-            border-top: 1px solid var(--border);
-            color: #94a3b8;
-            font-size: 10px;
-        }
-
-        .footer strong {
-            color: #64748b;
-        }
-
-        /* MOBILE OVERLAY */
-
-        .sidebar-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(15,23,42,0.5);
-            z-index: 999;
-        }
-
-        /* RESPONSIVE */
-
-        @media (max-width: 1100px) {
-            .sidebar {
-                width: 225px;
-            }
-
-            .main-content {
-                width: calc(100% - 225px);
-                margin-left: 225px;
-            }
-
-            .topbar {
-                padding: 0 24px;
-            }
-
-            .page-content {
-                padding: 25px 24px 35px;
-            }
-
-            .subject-grid {
-                grid-template-columns: repeat(2, minmax(0, 1fr));
-            }
-        }
-
-        @media (max-width: 760px) {
-            .sidebar {
-                width: 270px;
-                transform: translateX(-100%);
-            }
-
-            .sidebar.open {
-                transform: translateX(0);
-            }
-
-            .sidebar-overlay.show {
-                display: block;
-            }
-
-            .main-content {
-                width: 100%;
-                margin-left: 0;
-            }
-
-            .topbar {
-                height: 72px;
-                padding: 0 16px;
-            }
-
-            .menu-toggle {
-                display: grid;
-                place-items: center;
-            }
-
-            .topbar-title {
-                font-size: 15px;
-            }
-
-            .breadcrumb {
-                font-size: 10px;
-            }
-
-            .header-date {
-                display: none;
-            }
-
-            .page-content {
-                padding: 20px 14px 28px;
-            }
-
-            .welcome-banner {
-                padding: 25px 21px;
-                align-items: flex-start;
-            }
-
-            .welcome-side {
-                display: none;
-            }
-
-            .welcome-title {
-                font-size: 25px;
-            }
-
-            .welcome-description {
-                font-size: 11px;
-            }
-
-            .stats-grid {
-                grid-template-columns: 1fr;
-                gap: 12px;
-            }
-
-            .stat-card {
-                padding: 19px;
-            }
-
-            .stat-value {
-                font-size: 29px;
-                margin-top: 13px;
-            }
-
-            .panel {
-                padding: 17px;
-                margin-top: 16px;
-            }
-
-            .section-heading {
-                margin-top: 25px;
-            }
-
-            .filter-bar {
-                align-items: stretch;
-                flex-direction: column;
-            }
-
-            .filter-group,
-            .filter-control,
-            .search-control,
-            .year-control {
-                width: 100%;
-                min-width: 0;
-            }
-
-            .filter-actions .btn {
-                flex: 1;
-            }
-
-            .subject-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .mapping-box {
-                align-items: stretch;
-                flex-direction: column;
-            }
-
-            .mapping-box > .btn {
-                width: 100%;
-            }
-
-            .footer {
-                flex-direction: column;
-            }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            *,
-            *::before,
-            *::after {
-                scroll-behavior: auto !important;
-                animation: none !important;
-                transition: none !important;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Staff Dashboard | LMS</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 25px;
+}
+
+body {
+    background: #f4f5fb;
+    color: #252344;
+}
+
+a {
+    text-decoration: none;
+}
+
+button, input, select {
+    font: inherit;
+}
+
+/* MAIN LAYOUT */
+
+.layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* SIDEBAR */
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 255px;
+    height: 100vh;
+    background: linear-gradient(180deg, #28245c, #5942a9);
+    color: white;
+    padding: 30px 18px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar::-webkit-scrollbar {
+    width: 4px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.25);
+    border-radius: 10px;
+}
+
+.logo {
+    font-size: 23px;
+    font-weight: 800;
+    padding: 0 12px 40px;
+    white-space: nowrap;
+}
+
+.logo span {
+    color: #c4b5fd;
+}
+
+.menu-title {
+    font-size: 11px;
+    color: #c4b5fd;
+    letter-spacing: 2px;
+    margin: 10px 12px 18px;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    padding: 14px;
+    color: #e9e5ff;
+    border-radius: 11px;
+    margin-bottom: 9px;
+    font-size: 13px;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    background: rgba(255,255,255,0.17);
+    color: white;
+    transform: translateX(4px);
+}
+
+.nav-link span {
+    font-size: 19px;
+}
+
+.sidebar-bottom {
+    margin-top: auto;
+    padding: 18px 10px;
+    border-top: 1px solid rgba(255,255,255,0.2);
+}
+
+.staff-profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.avatar {
+    width: 42px;
+    height: 42px;
+    background: #ddd6fe;
+    color: #5b21b6;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 19px;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+.staff-profile p {
+    font-size: 13px;
+    font-weight: bold;
+    overflow-wrap: anywhere;
+}
+
+.staff-profile small {
+    color: #ddd6fe;
+    font-size: 11px;
+}
+
+/* MAIN CONTENT */
+
+.main-content {
+    flex: 1;
+    min-width: 0;
+    margin-left: 255px;
+    padding: 30px 38px;
+}
+
+/* HEADER */
+
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+    gap: 15px;
+}
+
+.topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.topbar h2 {
+    font-size: 25px;
+    color: #28245c;
+}
+
+.topbar p {
+    color: #88869f;
+    font-size: 13px;
+    margin-top: 5px;
+}
+
+.topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.department-badge {
+    background: #ede9fe;
+    color: #5b21b6;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.header-date {
+    color: #88869f;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.logout {
+    background: white;
+    color: #dc2626;
+    padding: 11px 19px;
+    border-radius: 10px;
+    border: 1px solid #fee2e2;
+    font-size: 13px;
+    font-weight: bold;
+    transition: 0.3s;
+    white-space: nowrap;
+}
+
+.logout:hover {
+    background: #fee2e2;
+    transform: translateY(-2px);
+}
+
+/* WELCOME BANNER */
+
+.welcome-banner {
+    background: linear-gradient(120deg, #5145b8, #8960d9);
+    padding: 34px;
+    border-radius: 20px;
+    color: white;
+    margin-bottom: 35px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(81,69,184,0.16);
+}
+
+.welcome-banner::after {
+    content: "🎓";
+    position: absolute;
+    right: 55px;
+    top: 15px;
+    font-size: 95px;
+    opacity: 0.13;
+}
+
+.welcome-banner h1 {
+    font-size: 28px;
+    margin-bottom: 12px;
+    position: relative;
+    z-index: 1;
+    overflow-wrap: anywhere;
+}
+
+.welcome-banner p {
+    font-size: 14px;
+    color: #e9e5ff;
+    line-height: 1.7;
+    position: relative;
+    z-index: 1;
+    max-width: 750px;
+}
+
+.welcome-tag {
+    display: inline-block;
+    margin-top: 18px;
+    padding: 9px 15px;
+    background: rgba(255,255,255,0.17);
+    border-radius: 30px;
+    font-size: 12px;
+    position: relative;
+    z-index: 1;
+}
+
+/* SECTION HEADING */
+
+.section-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.section-heading h2 {
+    font-size: 20px;
+    color: #28245c;
+}
+
+.section-heading p {
+    color: #9290a7;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+.section-tag {
+    background: white;
+    border: 1px solid #eeedf5;
+    border-radius: 9px;
+    padding: 9px 13px;
+    color: #6950c7;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+/* STATISTICS */
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+    margin-bottom: 38px;
+}
+
+.card {
+    background: white;
+    padding: 23px;
+    border-radius: 16px;
+    border: 1px solid #eeedf5;
+    box-shadow: 0 4px 15px rgba(40,36,92,0.04);
+    transition: 0.3s;
+    min-width: 0;
+}
+
+.card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 25px rgba(40,36,92,0.09);
+}
+
+.card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.icon {
+    width: 47px;
+    height: 47px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 13px;
+    font-size: 23px;
+}
+
+.purple { background: #ede9fe; }
+.blue { background: #dbeafe; }
+.pink { background: #fce7f3; }
+.orange { background: #ffedd5; }
+
+.card-label {
+    color: #9290a7;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.card h3 {
+    font-size: 31px;
+    color: #28245c;
+    overflow-wrap: anywhere;
+}
+
+.card p {
+    color: #9290a7;
+    font-size: 11px;
+    margin-top: 7px;
+    line-height: 1.7;
+}
+
+/* GENERAL PANELS */
+
+.panel {
+    background: white;
+    padding: 25px;
+    border-radius: 17px;
+    border: 1px solid #eeedf5;
+    box-shadow: 0 4px 15px rgba(40,36,92,0.04);
+    margin-bottom: 25px;
+    scroll-margin-top: 25px;
+    min-width: 0;
+}
+
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 22px;
+    flex-wrap: wrap;
+}
+
+.panel-header h2 {
+    font-size: 18px;
+    color: #28245c;
+}
+
+.panel-header p {
+    color: #9290a7;
+    font-size: 12px;
+    margin-top: 6px;
+    line-height: 1.7;
+}
+
+/* BUTTONS */
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 11px 16px;
+    border-radius: 9px;
+    font-size: 12px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+    white-space: nowrap;
+}
+
+.btn-primary {
+    background: linear-gradient(120deg, #5145b8, #8960d9);
+    color: white;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 7px 15px rgba(81,69,184,0.2);
+}
+
+.btn-light {
+    background: #f4f1ff;
+    color: #5942a9;
+    border: 1px solid #e5ddff;
+}
+
+.btn-light:hover {
+    background: #e9e1ff;
+}
+
+/* FILTER BAR */
+
+.filter-bar {
+    display: flex;
+    align-items: flex-end;
+    gap: 13px;
+    flex-wrap: wrap;
+    padding: 17px;
+    margin-bottom: 20px;
+    border: 1px solid #eeedf5;
+    background: #faf9ff;
+    border-radius: 13px;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.filter-group label {
+    color: #514b70;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.filter-control {
+    min-height: 42px;
+    padding: 10px 12px;
+    background: white;
+    border: 1px solid #e5e2ef;
+    border-radius: 8px;
+    color: #334155;
+    font-size: 12px;
+    outline: none;
+}
+
+.filter-control:focus {
+    border-color: #8960d9;
+    box-shadow: 0 0 0 3px rgba(137,96,217,0.1);
+}
+
+.search-control {
+    width: 240px;
+    max-width: 100%;
+}
+
+.year-control {
+    min-width: 190px;
+}
+
+.filter-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+/* TABLE */
+
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+    border: 1px solid #eeedf5;
+    border-radius: 12px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 750px;
+}
+
+thead th {
+    padding: 15px 14px;
+    text-align: left;
+    color: #5942a9;
+    background: #f4f1ff;
+    border-bottom: 1px solid #eeedf5;
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+
+tbody td {
+    padding: 15px 14px;
+    border-bottom: 1px solid #f0eff7;
+    font-size: 11px;
+    color: #57536f;
+    vertical-align: middle;
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+tbody tr:hover {
+    background: #faf9ff;
+}
+
+.student-cell {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 150px;
+}
+
+.student-avatar {
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    color: #5b21b6;
+    background: #ede9fe;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.student-name {
+    font-weight: bold;
+    color: #28245c;
+    font-size: 12px;
+}
+
+.student-id {
+    margin-top: 5px;
+    font-size: 10px;
+    color: #9290a7;
+}
+
+.email-cell {
+    min-width: 175px;
+    overflow-wrap: anywhere;
+}
+
+.marks-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #ede9fe;
+    color: #5b21b6;
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 10px;
+    font-weight: bold;
+    white-space: nowrap;
+    transition: 0.3s;
+}
+
+.marks-button:hover {
+    background: #5942a9;
+    color: white;
+}
+
+/* EMPTY STATE */
+
+.empty-state {
+    text-align: center;
+    padding: 38px 18px;
+    color: #9290a7;
+}
+
+.empty-icon {
+    font-size: 35px;
+    margin-bottom: 12px;
+}
+
+.empty-state h3 {
+    color: #28245c;
+    font-size: 15px;
+    margin-bottom: 8px;
+}
+
+.empty-state p {
+    font-size: 12px;
+    line-height: 1.8;
+}
+
+/* SUBJECT CARDS */
+
+.subject-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.subject-card {
+    background: white;
+    padding: 21px;
+    border-radius: 15px;
+    border: 1px solid #eeedf5;
+    transition: 0.3s;
+    min-width: 0;
+}
+
+.subject-card:hover {
+    transform: translateY(-5px);
+    border-color: #c4b5fd;
+    box-shadow: 0 10px 20px rgba(81,69,184,0.08);
+}
+
+.subject-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.subject-symbol {
+    width: 43px;
+    height: 43px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: #ede9fe;
+    font-size: 21px;
+}
+
+.subject-number {
+    font-size: 10px;
+    color: #9290a7;
+    font-weight: bold;
+}
+
+.subject-code {
+    display: inline-block;
+    color: #5942a9;
+    background: #f0ebff;
+    padding: 6px 9px;
+    border-radius: 7px;
+    font-size: 10px;
+    font-weight: bold;
+    margin-top: 17px;
+}
+
+.subject-name {
+    font-size: 14px;
+    color: #28245c;
+    margin-top: 12px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+
+/* TIMETABLE */
+
+.timetable-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.timetable-grid {
+    min-width: 760px;
+    table-layout: auto;
+    text-align: center;
+}
+
+.timetable-grid th {
+    text-align: center;
+    background: #ede9fe;
+    color: #5942a9;
+}
+
+.timetable-grid td {
+    text-align: center;
+    min-width: 105px;
+    white-space: normal;
+    line-height: 1.6;
+    padding: 15px 9px;
+}
+
+.timetable-grid td:first-child {
+    min-width: 145px;
+    color: #28245c;
+    background: #f8f6ff;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.timetable-grid .break-row td {
+    background: #fff7ed;
+    color: #9a3412;
+    font-weight: bold;
+}
+
+.timetable-grid .lunch-row td {
+    background: #ecfdf5;
+    color: #047857;
+    font-weight: bold;
+}
+
+.subject-code-label {
+    display: block;
+    color: #5942a9;
+    font-size: 10px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.subject-name-label {
+    display: block;
+    font-size: 10px;
+    color: #57536f;
+}
+
+.free-period {
+    color: #aaa8bb;
+    font-size: 10px;
+}
+
+/* YEAR SUBJECT MAPPING */
+
+.mapping-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 22px;
+    padding: 24px;
+    border-radius: 15px;
+    background: linear-gradient(120deg, #f4f1ff, #eff6ff);
+    border: 1px solid #e5ddff;
+}
+
+.mapping-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    min-width: 0;
+}
+
+.mapping-icon {
+    width: 55px;
+    height: 55px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    border-radius: 14px;
+    background: white;
+}
+
+.mapping-title {
+    font-size: 14px;
+    font-weight: bold;
+    color: #28245c;
+}
+
+.mapping-description {
+    color: #9290a7;
+    font-size: 11px;
+    line-height: 1.8;
+    margin-top: 7px;
+}
+
+/* FOOTER */
+
+.footer {
+    text-align: center;
+    padding: 25px 0 5px;
+    color: #aaa8bb;
+    font-size: 12px;
+    margin-top: 25px;
+    border-top: 1px solid #e8e7ef;
+}
+
+/* MOBILE MENU */
+
+.menu-toggle {
+    display: none;
+    background: #ede9fe;
+    color: #5942a9;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.sidebar-overlay {
+    display: none;
+}
+
+/* RESPONSIVE */
+
+@media(max-width: 1100px) {
+    .cards {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .subject-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .main-content {
+        padding: 25px;
+    }
+}
+
+@media(max-width: 760px) {
+    .sidebar {
+        width: 270px;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+    }
+
+    .sidebar.open {
+        transform: translateX(0);
+    }
+
+    .sidebar-overlay.show {
+        display: block;
+        position: fixed;
+        inset: 0;
+        background: rgba(15,23,42,0.5);
+        z-index: 999;
+    }
+
+    .main-content {
+        margin-left: 0;
+        padding: 20px 15px;
+        width: 100%;
+    }
+
+    .menu-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .topbar {
+        flex-wrap: wrap;
+        margin-bottom: 23px;
+    }
+
+    .topbar h2 {
+        font-size: 20px;
+    }
+
+    .header-date {
+        display: none;
+    }
+
+    .welcome-banner {
+        padding: 25px 20px;
+    }
+
+    .welcome-banner h1 {
+        font-size: 23px;
+    }
+
+    .welcome-banner::after {
+        right: 10px;
+        font-size: 65px;
+    }
+
+    .panel {
+        padding: 18px;
+    }
+
+    .filter-bar {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .filter-group,
+    .filter-control,
+    .search-control,
+    .year-control {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .filter-actions .btn {
+        flex: 1;
+    }
+
+    .mapping-box {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .mapping-box > .btn {
+        width: 100%;
+    }
+}
+
+@media(max-width: 480px) {
+    .cards,
+    .subject-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .topbar h2 {
+        font-size: 18px;
+    }
+
+    .department-badge {
+        font-size: 10px;
+        padding: 8px;
+    }
+
+    .logout {
+        padding: 9px 11px;
+        font-size: 11px;
+    }
+
+    .welcome-banner h1 {
+        font-size: 21px;
+    }
+
+    .welcome-banner p {
+        font-size: 12px;
+    }
+
+    .section-heading h2 {
+        font-size: 18px;
+    }
+}
+</style>
 </head>
 
 <body>
 
-<div class="app-layout">
+<div class="layout">
 
     <!-- SIDEBAR -->
 
     <aside class="sidebar" id="sidebar">
 
-        <div class="brand">
-            <div class="brand-logo">C</div>
-
-            <div>
-                <div class="brand-name">CampusFlow</div>
-                <div class="brand-caption">LEARNING MANAGEMENT</div>
-            </div>
+        <div class="logo">
+            🎓 LMS <span>Portal</span>
         </div>
 
-        <div class="nav-heading">Workspace</div>
+        <p class="menu-title">MAIN MENU</p>
 
-        <nav class="nav-menu">
+        <nav>
 
             <a href="#overview" class="nav-link active">
-                <span class="nav-icon">⌂</span>
-                <span>Dashboard</span>
+                <span>📊</span> Dashboard
+            </a>
+
+            <a href="#profile-section" class="nav-link">
+                <span>👤</span> My Profile
             </a>
 
             <a href="#students-section" class="nav-link">
-                <span class="nav-icon">♙</span>
-                <span>Student Management</span>
+                <span>👨‍🎓</span> Student Management
             </a>
 
             <a href="#subjects-section" class="nav-link">
-                <span class="nav-icon">▤</span>
-                <span>My Subjects</span>
+                <span>📚</span> My Subjects
             </a>
 
             <a href="#timetable-section" class="nav-link">
-                <span class="nav-icon">▦</span>
-                <span>Weekly Timetable</span>
+                <span>📅</span> Timetable
             </a>
 
             <a href="#mapping-section" class="nav-link">
-                <span class="nav-icon">⇄</span>
-                <span>Year Subject Mapping</span>
+                <span>🔗</span> Year Subject Mapping
             </a>
-
-        </nav>
-
-        <div class="nav-heading">Account</div>
-
-        <nav class="nav-menu">
 
             <a href="{% url 'staff_change_password' %}" class="nav-link">
-                <span class="nav-icon">♙</span>
-                <span>Change Password</span>
-            </a>
-
-            <a href="{% url 'staff_logout' %}" class="nav-link">
-                <span class="nav-icon">↪</span>
-                <span>Logout</span>
+                <span>🔐</span> Change Password
             </a>
 
         </nav>
 
         <div class="sidebar-bottom">
 
-            <div class="sidebar-profile">
+            <div class="staff-profile">
 
                 <div class="avatar">
                     {{ staff.name|default:"S"|slice:":1"|upper }}
                 </div>
 
-                <div style="min-width:0;">
-                    <div class="profile-name">{{ staff.name }}</div>
-                    <div class="profile-role">Faculty / Staff</div>
+                <div>
+                    <p>{{ staff.name }}</p>
+                    <small>Faculty / Staff</small>
                 </div>
 
             </div>
@@ -1206,7 +1031,7 @@
 
     <main class="main-content">
 
-        <!-- TOPBAR -->
+        <!-- HEADER -->
 
         <header class="topbar">
 
@@ -1221,8 +1046,8 @@
                 </button>
 
                 <div>
-                    <div class="breadcrumb">Workspace / Staff Portal</div>
-                    <div class="topbar-title">Staff Dashboard</div>
+                    <h2>Staff Dashboard</h2>
+                    <p>Welcome to your faculty workspace.</p>
                 </div>
 
             </div>
@@ -1235,839 +1060,755 @@
                     {{ staff.department|default:"Department Not Assigned"|upper }}
                 </div>
 
+                <a href="{% url 'staff_logout' %}" class="logout">
+                    ↪ Logout
+                </a>
+
             </div>
 
         </header>
 
-        <div class="page-content">
+        <!-- WELCOME -->
 
-            <!-- WELCOME SECTION -->
+        <section class="welcome-banner" id="overview">
 
-            <section id="overview" class="welcome-banner">
+            <h1>Welcome, {{ staff.name }}! 👋</h1>
 
-                <div class="welcome-content">
+            <p>
+                Manage your students, organize academic subjects,
+                update marks and monitor your teaching schedule
+                from one convenient dashboard.
+            </p>
 
-                    <div class="welcome-label">
-                        <span>✦</span>
-                        FACULTY WORKSPACE
+            <span class="welcome-tag">
+                ✨ Faculty Workspace |
+                {{ staff.department|default:"Not Assigned"|upper }} Department
+            </span>
+
+        </section>
+
+        <!-- STATISTICS -->
+
+        <section>
+
+            <div class="section-heading">
+                <div>
+                    <h2>Academic Overview</h2>
+                    <p>A quick summary of your academic responsibilities.</p>
+                </div>
+            </div>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="card-top">
+                        <div class="icon purple">👨‍🎓</div>
+                        <span class="card-label">STUDENTS</span>
                     </div>
 
-                    <h1 class="welcome-title">
-                        Welcome back,<br>
-                        <span>{{ staff.name }}!</span>
-                    </h1>
+                    <h3>{{ total_students }}</h3>
 
-                    <p class="welcome-description">
-                        Manage your students, organize academic subjects,
-                        update marks and stay on top of your teaching schedule
-                        from one convenient workspace.
+                    <p>
+                        {% if selected_year %}
+                            Students in the selected academic year.
+                        {% else %}
+                            Total students in your department.
+                        {% endif %}
                     </p>
 
                 </div>
 
-                <div class="welcome-side">
+                <div class="card">
 
-                    <div class="welcome-date" id="welcomeDate"></div>
-
-                    <div class="welcome-department">
-                        ✦ {{ staff.department|default:"Not Assigned"|upper }} Department
+                    <div class="card-top">
+                        <div class="icon blue">🏢</div>
+                        <span class="card-label">DEPARTMENT</span>
                     </div>
+
+                    <h3 style="font-size:25px;">
+                        {{ staff.department|default:"N/A"|upper }}
+                    </h3>
+
+                    <p>Your assigned academic department.</p>
 
                 </div>
 
-            </section>
+                <div class="card">
 
-            <!-- STATISTICS -->
-
-            <section>
-
-                <div class="section-heading">
-
-                    <div>
-                        <h2 class="section-title">Academic Overview</h2>
-
-                        <p class="section-subtitle">
-                            A quick summary of your department and teaching responsibilities.
-                        </p>
+                    <div class="card-top">
+                        <div class="icon pink">📚</div>
+                        <span class="card-label">SUBJECTS</span>
                     </div>
 
-                    <div class="section-tag">
-                        Academic Dashboard
-                    </div>
+                    <h3>{{ subjects|length }}</h3>
+
+                    <p>Subjects available in your dashboard.</p>
 
                 </div>
 
-                <div class="stats-grid">
+            </div>
 
-                    <div class="stat-card">
+        </section>
 
-                        <div class="stat-top">
-                            <div class="stat-label">Total Students</div>
+        <!-- STAFF PROFILE -->
 
-                            <div class="stat-icon icon-purple">♙</div>
-                        </div>
+        <section class="panel" id="profile-section">
 
-                        <div class="stat-value">{{ total_students }}</div>
+            <div class="panel-header">
 
-                        <div class="stat-description">
-                            {% if selected_year %}
-                                Students in your department for the selected academic year.
-                            {% else %}
-                                Students belonging to your department across all years.
-                            {% endif %}
-                        </div>
+                <div>
+                    <h2>My Faculty Profile</h2>
+                    <p>View your registered staff information.</p>
+                </div>
 
-                    </div>
+                <div class="icon purple">👤</div>
 
-                    <div class="stat-card">
+            </div>
 
-                        <div class="stat-top">
-                            <div class="stat-label">Department</div>
+            <div class="table-container">
 
-                            <div class="stat-icon icon-green">▦</div>
-                        </div>
+                <table style="min-width:500px;">
 
-                        <div class="stat-value"
-                             style="font-size:27px;">
-                            {{ staff.department|default:"N/A"|upper }}
-                        </div>
+                    <thead>
+                        <tr>
+                            <th>Staff ID</th>
+                            <th>Full Name</th>
+                            <th>Email Address</th>
+                            <th>Phone Number</th>
+                            <th>Department</th>
+                        </tr>
+                    </thead>
 
-                        <div class="stat-description">
-                            Your assigned academic department.
-                        </div>
+                    <tbody>
+                        <tr>
 
-                    </div>
+                            <td><strong>{{ staff.id }}</strong></td>
 
-                    <div class="stat-card">
+                            <td><strong>{{ staff.name }}</strong></td>
 
-                        <div class="stat-top">
-                            <div class="stat-label">Available Subjects</div>
+                            <td class="email-cell">{{ staff.email }}</td>
 
-                            <div class="stat-icon icon-orange">▤</div>
-                        </div>
+                            <td>{{ staff.phone|default:"Not provided" }}</td>
 
-                        <div class="stat-value">{{ subjects|length }}</div>
+                            <td>{{ staff.department|default:"Not assigned"|upper }}</td>
 
-                        <div class="stat-description">
-                            Subjects available in the current dashboard view.
-                        </div>
+                        </tr>
+                    </tbody>
 
-                    </div>
+                </table>
+
+            </div>
+
+        </section>
+
+        <!-- STUDENT MANAGEMENT -->
+
+        <section class="panel" id="students-section">
+
+            <div class="panel-header">
+
+                <div>
+                    <h2>Student Management</h2>
+                    <p>View your department students and manage their academic marks.</p>
+                </div>
+
+                <div class="section-tag">
+                    {{ total_students }} Student{{ total_students|pluralize }}
+                </div>
+
+            </div>
+
+            <!-- YEAR FILTER AND SEARCH -->
+
+            <form method="GET"
+                  action="{% url 'staff_dashboard' %}"
+                  class="filter-bar"
+                  id="yearFilterForm">
+
+                <div class="filter-group">
+
+                    <label for="year">Academic Year</label>
+
+                    <select name="year"
+                            id="year"
+                            class="filter-control year-control"
+                            onchange="this.form.submit()">
+
+                        <option value="">All Academic Years</option>
+
+                        {% for year in years %}
+
+                            <option value="{{ year.year_id }}"
+                                {% if selected_year == year.year_id|stringformat:"s" %}
+                                    selected
+                                {% endif %}>
+
+                                {{ year.year_name }}
+
+                            </option>
+
+                        {% endfor %}
+
+                    </select>
 
                 </div>
 
-            </section>
+                <div class="filter-group">
 
-            <!-- STAFF PROFILE -->
+                    <label for="studentSearch">Search Students</label>
 
-            <section class="panel" id="profile-section">
-
-                <div class="panel-header">
-
-                    <div>
-                        <h2 class="panel-title">My Faculty Profile</h2>
-
-                        <p class="panel-description">
-                            Your registered staff information.
-                        </p>
-                    </div>
-
-                    <div class="stat-icon icon-purple">♙</div>
+                    <input type="search"
+                           id="studentSearch"
+                           class="filter-control search-control"
+                           placeholder="Search name, ID or email..."
+                           autocomplete="off">
 
                 </div>
+
+                <div class="filter-actions">
+
+                    <button type="button"
+                            class="btn btn-light"
+                            id="clearSearch">
+                        Clear Search
+                    </button>
+
+                    {% if selected_year %}
+
+                        <a href="{% url 'staff_dashboard' %}"
+                           class="btn btn-primary">
+                            Show All Years
+                        </a>
+
+                    {% endif %}
+
+                </div>
+
+            </form>
+
+            <!-- STUDENT TABLE -->
+
+            {% if students %}
 
                 <div class="table-container">
 
-                    <table style="min-width:500px;">
+                    <table id="studentTable">
 
                         <thead>
                             <tr>
-                                <th>Staff ID</th>
-                                <th>Full Name</th>
+                                <th>Student</th>
+                                <th>Age</th>
+                                <th>Date of Birth</th>
+                                <th>Phone</th>
                                 <th>Email Address</th>
-                                <th>Phone Number</th>
-                                <th>Department</th>
+                                <th>Marks Management</th>
                             </tr>
                         </thead>
 
-                        <tbody>
-                            <tr>
+                        <tbody id="studentTableBody">
 
-                                <td>
-                                    <strong>{{ staff.id }}</strong>
-                                </td>
+                            {% for student in students %}
 
-                                <td>
-                                    <strong>{{ staff.name }}</strong>
-                                </td>
+                                <tr class="student-row">
 
-                                <td class="email-cell">
-                                    {{ staff.email }}
-                                </td>
+                                    <td>
 
-                                <td>
-                                    {{ staff.phone|default:"Not provided" }}
-                                </td>
+                                        <div class="student-cell">
 
-                                <td>
-                                    {{ staff.department|default:"Not assigned"|upper }}
-                                </td>
+                                            <div class="student-avatar">
+                                                {{ student.name|default:"S"|slice:":1"|upper }}
+                                            </div>
 
-                            </tr>
+                                            <div>
+                                                <div class="student-name">
+                                                    {{ student.name }}
+                                                </div>
+
+                                                <div class="student-id">
+                                                    Student ID: {{ student.id }}
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </td>
+
+                                    <td>{{ student.age|default:"—" }}</td>
+
+                                    <td>
+                                        {{ student.dod|date:"d-m-Y"|default:"Not provided" }}
+                                    </td>
+
+                                    <td>
+                                        {{ student.phone|default:"Not provided" }}
+                                    </td>
+
+                                    <td class="email-cell">
+                                        {{ student.email }}
+                                    </td>
+
+                                    <td>
+
+                                        <a href="{% url 'add_student_marks' student.id %}"
+                                           class="marks-button">
+                                            ✎ Add / Update Marks
+                                        </a>
+
+                                    </td>
+
+                                </tr>
+
+                            {% endfor %}
+
                         </tbody>
 
                     </table>
 
                 </div>
 
-            </section>
+                <div id="noSearchResults"
+                     class="empty-state"
+                     style="display:none;">
 
-            <!-- STUDENT MANAGEMENT -->
+                    <div class="empty-icon">🔍</div>
 
-            <section class="panel" id="students-section">
+                    <h3>No matching students</h3>
 
-                <div class="panel-header">
-
-                    <div>
-                        <h2 class="panel-title">Student Management</h2>
-
-                        <p class="panel-description">
-                            View your department students and manage their academic marks.
-                        </p>
-                    </div>
-
-                    <div class="section-tag">
-                        {{ total_students }} Student{{ total_students|pluralize }}
-                    </div>
+                    <p>Try searching with a different name, student ID or email.</p>
 
                 </div>
 
-                <!-- FILTER FORM -->
+            {% else %}
 
-                <form method="GET"
-                      action="{% url 'staff_dashboard' %}"
-                      class="filter-bar"
-                      id="yearFilterForm">
+                <div class="empty-state">
 
-                    <div class="filter-group">
+                    <div class="empty-icon">👨‍🎓</div>
 
-                        <label for="year">Academic Year</label>
+                    <h3>No students found</h3>
 
-                        <select name="year"
-                                id="year"
-                                class="filter-control year-control"
-                                onchange="this.form.submit()">
-
-                            <option value="">All Academic Years</option>
-
-                            {% for year in years %}
-
-                                <option value="{{ year.year_id }}"
-                                    {% if selected_year == year.year_id|stringformat:"s" %}
-                                        selected
-                                    {% endif %}>
-
-                                    {{ year.year_name }}
-
-                                </option>
-
-                            {% endfor %}
-
-                        </select>
-
-                    </div>
-
-                    <div class="filter-group">
-
-                        <label for="studentSearch">Search Students</label>
-
-                        <input type="search"
-                               id="studentSearch"
-                               class="filter-control search-control"
-                               placeholder="Search name, ID or email..."
-                               autocomplete="off">
-
-                    </div>
-
-                    <div class="filter-actions">
-
-                        <button type="button"
-                                class="btn btn-light"
-                                id="clearSearch">
-                            Clear Search
-                        </button>
-
+                    <p>
                         {% if selected_year %}
-
-                            <a href="{% url 'staff_dashboard' %}"
-                               class="btn btn-primary">
-                                Show All Years
-                            </a>
-
-                        {% endif %}
-
-                    </div>
-
-                </form>
-
-                <!-- STUDENT TABLE -->
-
-                {% if students %}
-
-                    <div class="table-container">
-
-                        <table id="studentTable">
-
-                            <thead>
-                                <tr>
-                                    <th>Student</th>
-                                    <th>Age</th>
-                                    <th>Date of Birth</th>
-                                    <th>Phone</th>
-                                    <th>Email Address</th>
-                                    <th>Marks Management</th>
-                                </tr>
-                            </thead>
-
-                            <tbody id="studentTableBody">
-
-                                {% for student in students %}
-
-                                    <tr class="student-row">
-
-                                        <td>
-
-                                            <div class="student-cell">
-
-                                                <div class="student-avatar">
-                                                    {{ student.name|default:"S"|slice:":1"|upper }}
-                                                </div>
-
-                                                <div>
-
-                                                    <div class="student-name">
-                                                        {{ student.name }}
-                                                    </div>
-
-                                                    <div class="student-id">
-                                                        Student ID: {{ student.id }}
-                                                    </div>
-
-                                                </div>
-
-                                            </div>
-
-                                        </td>
-
-                                        <td>
-                                            {{ student.age|default:"—" }}
-                                        </td>
-
-                                        <td>
-                                            {{ student.dod|date:"d-m-Y"|default:"Not provided" }}
-                                        </td>
-
-                                        <td>
-                                            {{ student.phone|default:"Not provided" }}
-                                        </td>
-
-                                        <td class="email-cell">
-                                            {{ student.email }}
-                                        </td>
-
-                                        <td>
-
-                                            <a href="{% url 'add_student_marks' student.id %}"
-                                               class="marks-button">
-
-                                                ✎ Add / Update Marks
-
-                                            </a>
-
-                                        </td>
-
-                                    </tr>
-
-                                {% endfor %}
-
-                            </tbody>
-
-                        </table>
-
-                    </div>
-
-                    <div id="noSearchResults"
-                         class="empty-state"
-                         style="display:none;">
-
-                        <div class="empty-icon">⌕</div>
-
-                        <h3>No matching students</h3>
-
-                        <p>
-                            Try searching with a different name, student ID or email.
-                        </p>
-
-                    </div>
-
-                {% else %}
-
-                    <div class="empty-state">
-
-                        <div class="empty-icon">♙</div>
-
-                        <h3>No students found</h3>
-
-                        <p>
-                            {% if selected_year %}
-                                No students were found for the selected academic year
-                                in your department.
-                            {% else %}
-                                No students are currently available in your department.
-                            {% endif %}
-                        </p>
-
-                    </div>
-
-                {% endif %}
-
-            </section>
-
-            <!-- SUBJECT MANAGEMENT -->
-
-            <section class="panel" id="subjects-section">
-
-                <div class="panel-header">
-
-                    <div>
-                        <h2 class="panel-title">My Academic Subjects</h2>
-
-                        <p class="panel-description">
-                            Subjects associated with your department and academic year.
-                        </p>
-                    </div>
-
-                    <div class="section-tag">
-                        {{ staff.department|default:"N/A"|upper }}
-                    </div>
-
-                </div>
-
-                <div style="margin-bottom:20px;">
-
-                    <span style="font-size:11px;color:#64748b;">
-                        Department:
-                    </span>
-
-                    <strong style="font-size:11px;">
-                        {{ staff.department|default:"Not assigned"|upper }}
-                    </strong>
-
-                    <span style="font-size:11px;color:#64748b;margin-left:15px;">
-                        Academic Year:
-                    </span>
-
-                    <strong style="font-size:11px;">
-
-                        {% if selected_year %}
-
-                            {% for year in years %}
-
-                                {% if selected_year == year.year_id|stringformat:"s" %}
-                                    {{ year.year_name }}
-                                {% endif %}
-
-                            {% endfor %}
-
+                            No students were found for the selected academic year
+                            in your department.
                         {% else %}
-
-                            All Years
-
+                            No students are currently available in your department.
                         {% endif %}
-
-                    </strong>
+                    </p>
 
                 </div>
 
-                {% if subjects %}
+            {% endif %}
 
-                    <div class="subject-grid">
+        </section>
 
-                        {% for subject in subjects %}
+        <!-- SUBJECT MANAGEMENT -->
 
-                            <article class="subject-card">
+        <section class="panel" id="subjects-section">
 
-                                <div class="subject-card-top">
+            <div class="panel-header">
 
-                                    <div class="subject-symbol">▤</div>
+                <div>
+                    <h2>My Academic Subjects</h2>
+                    <p>Subjects associated with your department and academic year.</p>
+                </div>
 
-                                    <div class="subject-number">
-                                        SUBJECT {{ forloop.counter|stringformat:"02d" }}
-                                    </div>
+                <div class="section-tag">
+                    {{ staff.department|default:"N/A"|upper }}
+                </div>
 
-                                </div>
+            </div>
 
-                                <div class="subject-code">
-                                    {{ subject.subject_code }}
-                                </div>
+            <div style="margin-bottom:20px;">
 
-                                <h3 class="subject-name">
-                                    {{ subject.subject_name }}
-                                </h3>
+                <span style="font-size:12px;color:#9290a7;">
+                    Department:
+                </span>
 
-                            </article>
+                <strong style="font-size:12px;color:#28245c;">
+                    {{ staff.department|default:"Not assigned"|upper }}
+                </strong>
+
+                <span style="font-size:12px;color:#9290a7;margin-left:15px;">
+                    Academic Year:
+                </span>
+
+                <strong style="font-size:12px;color:#28245c;">
+
+                    {% if selected_year %}
+
+                        {% for year in years %}
+
+                            {% if selected_year == year.year_id|stringformat:"s" %}
+                                {{ year.year_name }}
+                            {% endif %}
 
                         {% endfor %}
 
-                    </div>
+                    {% else %}
+                        All Years
+                    {% endif %}
 
-                {% else %}
+                </strong>
 
-                    <div class="empty-state">
+            </div>
 
-                        <div class="empty-icon">▤</div>
+            {% if subjects %}
 
-                        <h3>No subjects available</h3>
+                <div class="subject-grid">
 
-                        <p>
-                            No subjects were found for the current department and academic year.
-                        </p>
+                    {% for subject in subjects %}
 
-                    </div>
+                        <article class="subject-card">
 
-                {% endif %}
+                            <div class="subject-card-top">
 
-            </section>
+                                <div class="subject-symbol">📚</div>
 
-            <!-- WEEKLY TIMETABLE -->
+                                <div class="subject-number">
+                                    SUBJECT {{ forloop.counter|stringformat:"02d" }}
+                                </div>
 
-            <section class="panel" id="timetable-section">
+                            </div>
 
-                <div class="panel-header">
+                            <div class="subject-code">
+                                {{ subject.subject_code }}
+                            </div>
 
-                    <div>
-                        <h2 class="panel-title">My Weekly Timetable</h2>
+                            <h3 class="subject-name">
+                                {{ subject.subject_name }}
+                            </h3>
 
-                        <p class="panel-description">
-                            Review your teaching schedule for each day of the week.
-                        </p>
-                    </div>
+                        </article>
 
-                    <div class="section-tag">
-                        {{ staff.department|default:"N/A"|upper }} Department
-                    </div>
+                    {% endfor %}
 
                 </div>
 
-                <p style="font-size:11px;color:#64748b;line-height:1.8;margin-bottom:20px;">
+            {% else %}
 
-                    {% if selected_year %}
-                        Displaying available timetable records for the selected academic year.
-                    {% else %}
-                        Displaying available timetable records for your staff account.
-                    {% endif %}
+                <div class="empty-state">
 
-                </p>
+                    <div class="empty-icon">📚</div>
 
-                {% if timetable_rows %}
+                    <h3>No subjects available</h3>
 
-                    <div class="timetable-container">
+                    <p>
+                        No subjects were found for the current department and academic year.
+                    </p>
 
-                        <table class="timetable-grid">
+                </div>
 
-                            <thead>
+            {% endif %}
 
-                                <tr>
+        </section>
 
-                                    <th>Time / Period</th>
+        <!-- WEEKLY TIMETABLE -->
 
-                                    {% for day in days %}
-                                        <th>{{ day }}</th>
+        <section class="panel" id="timetable-section">
+
+            <div class="panel-header">
+
+                <div>
+                    <h2>My Weekly Timetable</h2>
+                    <p>Review your teaching schedule for each day of the week.</p>
+                </div>
+
+                <div class="section-tag">
+                    {{ staff.department|default:"N/A"|upper }} Department
+                </div>
+
+            </div>
+
+            <p style="font-size:12px;color:#9290a7;line-height:1.8;margin-bottom:20px;">
+
+                {% if selected_year %}
+                    Displaying available timetable records for the selected academic year.
+                {% else %}
+                    Displaying available timetable records for your staff account.
+                {% endif %}
+
+            </p>
+
+            {% if timetable_rows %}
+
+                <div class="timetable-container">
+
+                    <table class="timetable-grid">
+
+                        <thead>
+                            <tr>
+
+                                <th>Time / Period</th>
+
+                                {% for day in days %}
+                                    <th>{{ day }}</th>
+                                {% endfor %}
+
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            {% for row in timetable_rows %}
+
+                                <tr class="{% if row.kind == 'break' %}break-row{% elif row.kind == 'lunch' %}lunch-row{% endif %}">
+
+                                    <td>{{ row.label }}</td>
+
+                                    {% for cell in row.cells %}
+
+                                        <td>
+
+                                            {% if row.kind == 'break' %}
+
+                                                <strong>☕ BREAK</strong>
+
+                                            {% elif row.kind == 'lunch' %}
+
+                                                <strong>🍽 LUNCH</strong>
+
+                                            {% elif cell.code %}
+
+                                                <span class="subject-code-label">
+                                                    {{ cell.code }}
+                                                </span>
+
+                                                <span class="subject-name-label">
+                                                    {{ cell.subject }}
+                                                </span>
+
+                                            {% else %}
+
+                                                <span class="free-period">
+                                                    {{ cell.subject|default:"Free Period" }}
+                                                </span>
+
+                                            {% endif %}
+
+                                        </td>
+
                                     {% endfor %}
 
                                 </tr>
 
-                            </thead>
+                            {% endfor %}
 
-                            <tbody>
+                        </tbody>
 
-                                {% for row in timetable_rows %}
+                    </table>
 
-                                    <tr class="{% if row.kind == 'break' %}break-row{% elif row.kind == 'lunch' %}lunch-row{% endif %}">
+                </div>
 
-                                        <td>
-                                            {{ row.label }}
-                                        </td>
+            {% else %}
 
-                                        {% for cell in row.cells %}
+                <div class="empty-state">
 
-                                            <td>
+                    <div class="empty-icon">📅</div>
 
-                                                {% if row.kind == 'break' %}
+                    <h3>No timetable available</h3>
 
-                                                    <strong>☕ BREAK</strong>
+                    <p>
+                        Timetable records for this staff member have not been found.
+                    </p>
 
-                                                {% elif row.kind == 'lunch' %}
+                </div>
 
-                                                    <strong>🍽 LUNCH</strong>
+            {% endif %}
 
-                                                {% elif cell.code %}
+        </section>
 
-                                                    <span class="subject-code-label">
-                                                        {{ cell.code }}
-                                                    </span>
+        <!-- YEAR SUBJECT MAPPING -->
 
-                                                    <span class="subject-name-label">
-                                                        {{ cell.subject }}
-                                                    </span>
+        <section class="panel" id="mapping-section">
 
-                                                {% else %}
+            <div class="panel-header">
 
-                                                    <span class="free-period">
-                                                        {{ cell.subject|default:"Free Period" }}
-                                                    </span>
+                <div>
+                    <h2>Year Subject Mapping</h2>
+                    <p>Organize subjects according to the appropriate academic year.</p>
+                </div>
 
-                                                {% endif %}
+                <div class="icon purple">🔗</div>
 
-                                            </td>
+            </div>
 
-                                        {% endfor %}
+            <div class="mapping-box">
 
-                                    </tr>
+                <div class="mapping-left">
 
-                                {% endfor %}
-
-                            </tbody>
-
-                        </table>
-
-                    </div>
-
-                {% else %}
-
-                    <div class="empty-state">
-
-                        <div class="empty-icon">▦</div>
-
-                        <h3>No timetable available</h3>
-
-                        <p>
-                            Timetable records for this staff member have not been found.
-                        </p>
-
-                    </div>
-
-                {% endif %}
-
-            </section>
-
-            <!-- YEAR SUBJECT MAPPING -->
-
-            <section class="panel" id="mapping-section">
-
-                <div class="panel-header">
+                    <div class="mapping-icon">📚</div>
 
                     <div>
-                        <h2 class="panel-title">Year Subject Mapping</h2>
 
-                        <p class="panel-description">
-                            Organize subjects according to the appropriate academic year.
+                        <h3 class="mapping-title">
+                            Academic Curriculum Management
+                        </h3>
+
+                        <p class="mapping-description">
+                            Manage subject allocations for First, Second, Third
+                            and Fourth Year students.
                         </p>
-                    </div>
-
-                    <div class="stat-icon icon-purple">⇄</div>
-
-                </div>
-
-                <div class="mapping-box">
-
-                    <div class="mapping-left">
-
-                        <div class="mapping-icon">📚</div>
-
-                        <div>
-
-                            <h3 class="mapping-title">
-                                Academic Curriculum Management
-                            </h3>
-
-                            <p class="mapping-description">
-                                Manage subject allocations for First, Second, Third
-                                and Fourth Year students.
-                            </p>
-
-                        </div>
 
                     </div>
 
-                    <a href="{% url 'year_subject' %}"
-                       class="btn btn-primary">
-
-                        Manage Year Subjects &nbsp; →
-
-                    </a>
-
                 </div>
 
-            </section>
+                <a href="{% url 'year_subject' %}"
+                   class="btn btn-primary">
+                    Manage Year Subjects →
+                </a>
 
-            <!-- FOOTER -->
+            </div>
 
-            <footer class="footer">
+        </section>
 
-                <div>
-                    © <span id="currentYear"></span>
-                    <strong>CampusFlow LMS</strong>.
-                    Staff Workspace.
-                </div>
+        <!-- FOOTER -->
 
-                <div>
-                    Designed for academic excellence.
-                </div>
-
-            </footer>
-
-        </div>
+        <footer class="footer">
+            © <span id="currentYear"></span> LMS Portal |
+            Learning Management System – Staff Workspace
+        </footer>
 
     </main>
 
 </div>
 
 <script>
-    /* CURRENT DATE */
 
-    const now = new Date();
+/* CURRENT DATE */
 
-    const dateOptions = {
-        day: "2-digit",
-        month: "short",
-        year: "numeric"
-    };
+const now = new Date();
 
-    const formattedDate = now.toLocaleDateString("en-IN", dateOptions);
+const dateOptions = {
+    day: "2-digit",
+    month: "short",
+    year: "numeric"
+};
 
-    document.getElementById("currentDate").textContent = formattedDate;
-    document.getElementById("welcomeDate").textContent = formattedDate;
-    document.getElementById("currentYear").textContent = now.getFullYear();
+const formattedDate = now.toLocaleDateString("en-IN", dateOptions);
+
+document.getElementById("currentDate").textContent = formattedDate;
+document.getElementById("currentYear").textContent = now.getFullYear();
 
 
-    /* MOBILE SIDEBAR */
+/* MOBILE SIDEBAR */
 
-    const sidebar = document.getElementById("sidebar");
-    const menuToggle = document.getElementById("menuToggle");
-    const sidebarOverlay = document.getElementById("sidebarOverlay");
+const sidebar = document.getElementById("sidebar");
+const menuToggle = document.getElementById("menuToggle");
+const sidebarOverlay = document.getElementById("sidebarOverlay");
 
-    function openSidebar() {
-        sidebar.classList.add("open");
-        sidebarOverlay.classList.add("show");
-        menuToggle.setAttribute("aria-expanded", "true");
+function openSidebar() {
+    sidebar.classList.add("open");
+    sidebarOverlay.classList.add("show");
+    menuToggle.setAttribute("aria-expanded", "true");
+}
+
+function closeSidebar() {
+    sidebar.classList.remove("open");
+    sidebarOverlay.classList.remove("show");
+    menuToggle.setAttribute("aria-expanded", "false");
+}
+
+menuToggle.addEventListener("click", function () {
+
+    if (sidebar.classList.contains("open")) {
+        closeSidebar();
+    } else {
+        openSidebar();
     }
 
-    function closeSidebar() {
-        sidebar.classList.remove("open");
-        sidebarOverlay.classList.remove("show");
-        menuToggle.setAttribute("aria-expanded", "false");
-    }
+});
 
-    menuToggle.addEventListener("click", function () {
-        if (sidebar.classList.contains("open")) {
-            closeSidebar();
-        } else {
-            openSidebar();
-        }
-    });
+sidebarOverlay.addEventListener("click", closeSidebar);
 
-    sidebarOverlay.addEventListener("click", closeSidebar);
 
-    document.querySelectorAll(".nav-link").forEach(function (link) {
+/* SIDEBAR ACTIVE LINK */
 
-        link.addEventListener("click", function () {
+document.querySelectorAll(".nav-link").forEach(function(link) {
 
-            document.querySelectorAll(".nav-link").forEach(function (item) {
-                item.classList.remove("active");
-            });
+    link.addEventListener("click", function() {
 
-            link.classList.add("active");
-
-            if (window.innerWidth <= 760) {
-                closeSidebar();
-            }
-
+        document.querySelectorAll(".nav-link").forEach(function(item) {
+            item.classList.remove("active");
         });
 
-    });
+        link.classList.add("active");
 
-
-    /* STUDENT SEARCH */
-
-    const studentSearch = document.getElementById("studentSearch");
-    const clearSearch = document.getElementById("clearSearch");
-    const noSearchResults = document.getElementById("noSearchResults");
-
-    if (studentSearch) {
-
-        const studentRows = document.querySelectorAll(".student-row");
-
-        function filterStudents() {
-
-            const searchValue = studentSearch.value
-                .trim()
-                .toLowerCase();
-
-            let visibleCount = 0;
-
-            studentRows.forEach(function (row) {
-
-                const rowText = row.textContent.toLowerCase();
-
-                const isMatch = rowText.includes(searchValue);
-
-                row.style.display = isMatch ? "" : "none";
-
-                if (isMatch) {
-                    visibleCount++;
-                }
-
-            });
-
-            if (noSearchResults) {
-                noSearchResults.style.display =
-                    visibleCount === 0 ? "block" : "none";
-            }
-
-            const studentTable = document.getElementById("studentTable");
-
-            if (studentTable) {
-                studentTable.style.display =
-                    visibleCount === 0 ? "none" : "";
-            }
-
-        }
-
-        studentSearch.addEventListener("input", filterStudents);
-
-        clearSearch.addEventListener("click", function () {
-
-            studentSearch.value = "";
-
-            filterStudents();
-
-            studentSearch.focus();
-
-        });
-
-    }
-
-
-    /* ESCAPE KEY CLOSES MOBILE SIDEBAR */
-
-    document.addEventListener("keydown", function (event) {
-
-        if (event.key === "Escape") {
+        if (window.innerWidth <= 760) {
             closeSidebar();
         }
 
     });
+
+});
+
+
+/* STUDENT SEARCH */
+
+const studentSearch = document.getElementById("studentSearch");
+const clearSearch = document.getElementById("clearSearch");
+const noSearchResults = document.getElementById("noSearchResults");
+
+if (studentSearch) {
+
+    const studentRows = document.querySelectorAll(".student-row");
+
+    function filterStudents() {
+
+        const searchValue = studentSearch.value.trim().toLowerCase();
+
+        let visibleCount = 0;
+
+        studentRows.forEach(function(row) {
+
+            const rowText = row.textContent.toLowerCase();
+            const isMatch = rowText.includes(searchValue);
+
+            row.style.display = isMatch ? "" : "none";
+
+            if (isMatch) {
+                visibleCount++;
+            }
+
+        });
+
+        if (noSearchResults) {
+            noSearchResults.style.display =
+                visibleCount === 0 ? "block" : "none";
+        }
+
+        const studentTable = document.getElementById("studentTable");
+
+        if (studentTable) {
+            studentTable.style.display =
+                visibleCount === 0 ? "none" : "";
+        }
+
+    }
+
+    studentSearch.addEventListener("input", filterStudents);
+
+    clearSearch.addEventListener("click", function() {
+
+        studentSearch.value = "";
+        filterStudents();
+        studentSearch.focus();
+
+    });
+
+}
+
+
+/* ESCAPE KEY */
+
+document.addEventListener("keydown", function(event) {
+
+    if (event.key === "Escape") {
+        closeSidebar();
+    }
+
+});
 
 </script>
 

@@ -1,73 +1,134 @@
+# from django.shortcuts import render, redirect
+# from django.contrib import messages
+# from django.contrib.auth.hashers import check_password
+# from ..forms import LoginForm
+# from ..models import UserAuth
+# def log(request):
+#     if request.method == "POST":
+#         form = LoginForm(request.POST)
+
+#         if form.is_valid():
+#             username = form.cleaned_data['username']
+#             password = form.cleaned_data['password']
+#             role = form.cleaned_data['role']
+
+#             user = UserAuth.objects.filter(
+#                 username=username,
+#                 role=role
+#             ).first()
+
+#             if user and user.password and check_password(
+#                 password, user.password
+#             ):
+
+#                 if role == 'Student':
+
+#                     if not user.user_id:
+#                         messages.error(
+#                             request,
+#                             "Your student account is not linked to a student record."
+#                         )
+#                         return redirect('log')
+
+#                     request.session['student_id'] = user.user_id
+
+#                     messages.success(
+#                         request,
+#                         "Student login successful!"
+#                     )
+
+#                     return redirect('student_dashboard')
+
+#                 elif role == 'Staff':
+
+#                     if not user.user_id:
+#                         messages.error(
+#                             request,
+#                             "Your staff account is not linked to a staff record."
+#                         )
+#                         return redirect('log')
+
+#                     request.session['staff_id'] = user.user_id
+
+#                     messages.success(
+#                         request,
+#                         "Staff login successful!"
+#                     )
+
+#                     return redirect('staff_dashboard')
+
+#             else:
+#                 messages.error(
+#                     request,
+#                     "Invalid username or password."
+#                 )
+
+#     else:
+#         form = LoginForm()
+
+#     return render(
+#         request,
+#         'students/login.html',
+#         {'form': form}
+#     )
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.hashers import check_password
-from ..forms import LoginForm
 from ..models import UserAuth
+
+
 def log(request):
+
+    selected_role = request.GET.get('role', '')
+
     if request.method == "POST":
-        form = LoginForm(request.POST)
 
-        if form.is_valid():
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password']
-            role = form.cleaned_data['role']
+        username = request.POST.get('username', '').strip()
+        password = request.POST.get('password', '')
+        role = request.POST.get('role', '')
 
-            user = UserAuth.objects.filter(
-                username=username,
-                role=role
-            ).first()
+        if role not in ['Student', 'Staff']:
+            messages.error(request, "Please select a valid login type.")
+            return redirect('log')
 
-            if user and user.password and check_password(
-                password, user.password
-            ):
+        user = UserAuth.objects.filter(
+            username=username,
+            role=role
+        ).first()
 
-                if role == 'Student':
+        if user and user.password and check_password(password, user.password):
 
-                    if not user.user_id:
-                        messages.error(
-                            request,
-                            "Your student account is not linked to a student record."
-                        )
-                        return redirect('log')
+            if role == 'Student':
 
-                    request.session['student_id'] = user.user_id
+                if not user.user_id:
+                    messages.error(request, "Student account is not linked.")
+                    return redirect('/log/?role=Student')
 
-                    messages.success(
-                        request,
-                        "Student login successful!"
-                    )
+                request.session['student_id'] = user.user_id
 
-                    return redirect('student_dashboard')
+                messages.success(request, "Student login successful!")
 
-                elif role == 'Staff':
+                return redirect('student_dashboard')
 
-                    if not user.user_id:
-                        messages.error(
-                            request,
-                            "Your staff account is not linked to a staff record."
-                        )
-                        return redirect('log')
+            elif role == 'Staff':
 
-                    request.session['staff_id'] = user.user_id
+                if not user.user_id:
+                    messages.error(request, "Staff account is not linked.")
+                    return redirect('/log/?role=Staff')
 
-                    messages.success(
-                        request,
-                        "Staff login successful!"
-                    )
+                request.session['staff_id'] = user.user_id
 
-                    return redirect('staff_dashboard')
+                messages.success(request, "Staff login successful!")
 
-            else:
-                messages.error(
-                    request,
-                    "Invalid username or password."
-                )
+                return redirect('staff_dashboard')
 
-    else:
-        form = LoginForm()
+        else:
+            messages.error(request, "Invalid username or password.")
+
+            return redirect(f'/log/?role={role}')
 
     return render(
         request,
         'students/login.html',
-        {'form': form}
+        {'selected_role': selected_role}
     )
