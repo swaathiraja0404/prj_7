@@ -4,236 +4,848 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Year Subject Mapping</title>
+    <title>Year Subject Mapping | CampusFlow LMS</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
+
         * {
+            margin: 0;
+            padding: 0;
             box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
         }
 
         body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #dbeafe, #f5d0fe);
-            margin: 0;
-            padding: 30px 15px;
+            background: #f4f5fb;
+            color: #252344;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        /* LAYOUT */
+
+        .layout {
+            display: flex;
             min-height: 100vh;
         }
 
-        .container {
-            max-width: 750px;
-            margin: auto;
-        }
+        /* SIDEBAR */
 
-        .card {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-            margin-bottom: 25px;
-        }
-
-        h1, h2 {
-            color: #2563eb;
-        }
-
-        h1 {
-            text-align: center;
-        }
-
-        label {
-            display: block;
-            margin-top: 18px;
-            margin-bottom: 8px;
-            font-weight: bold;
-            color: #334155;
-        }
-
-        .info-box {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #cbd5e1;
-            border-radius: 8px;
-            font-size: 15px;
-            background: white;
-        }
-
-        .info-box:focus {
-            outline: 2px solid #93c5fd;
-            border-color: #2563eb;
-        }
-
-        .save-btn, .back-btn {
-            display: inline-block;
-            padding: 12px 18px;
-            border: none;
-            border-radius: 8px;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 22px;
-        }
-
-        .save-btn {
-            background: #2563eb;
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 255px;
+            height: 100vh;
+            padding: 30px 18px;
+            background: linear-gradient(180deg, #28245c, #5942a9);
             color: white;
+            display: flex;
+            flex-direction: column;
+            z-index: 1000;
         }
 
-        .save-btn:hover {
-            background: #1d4ed8;
+        .logo {
+            font-size: 23px;
+            font-weight: 800;
+            padding: 0 12px 40px;
+        }
+
+        .logo span {
+            color: #c4b5fd;
+        }
+
+        .menu-title {
+            font-size: 11px;
+            color: #c4b5fd;
+            letter-spacing: 2px;
+            margin: 10px 12px 18px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            padding: 14px;
+            color: #e9e5ff;
+            border-radius: 11px;
+            margin-bottom: 9px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .nav-link span {
+            font-size: 19px;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: rgba(255,255,255,0.17);
+            color: white;
+            transform: translateX(4px);
+        }
+
+        .sidebar-bottom {
+            margin-top: auto;
+            padding: 18px 10px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .avatar {
+            width: 42px;
+            height: 42px;
+            background: #ddd6fe;
+            color: #5b21b6;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 800;
+        }
+
+        .profile p {
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .profile small {
+            color: #ddd6fe;
+            font-size: 11px;
+        }
+
+        /* MAIN CONTENT */
+
+        .main-content {
+            flex: 1;
+            min-width: 0;
+            margin-left: 255px;
+            padding: 32px 38px;
+        }
+
+        /* TOPBAR */
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .topbar h1 {
+            font-size: 25px;
+            color: #28245c;
+        }
+
+        .topbar p {
+            color: #9290a7;
+            font-size: 13px;
+            margin-top: 6px;
         }
 
         .back-btn {
-            background: #64748b;
-            color: white;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 11px 17px;
+            background: #ede9fe;
+            color: #5942a9;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 700;
+            transition: 0.3s;
+            white-space: nowrap;
         }
 
         .back-btn:hover {
-            background: #475569;
+            background: #ddd6fe;
+            transform: translateY(-2px);
+        }
+
+        /* WELCOME BANNER */
+
+        .welcome {
+            background: linear-gradient(120deg, #5145b8, #8960d9);
+            padding: 28px 32px;
+            border-radius: 18px;
+            color: white;
+            margin-bottom: 28px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(81,69,184,0.14);
+        }
+
+        .welcome::after {
+            content: "📚";
+            position: absolute;
+            right: 45px;
+            top: 10px;
+            font-size: 85px;
+            opacity: 0.15;
+        }
+
+        .welcome h2 {
+            font-size: 23px;
+            margin-bottom: 9px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .welcome p {
+            font-size: 13px;
+            color: #e9e5ff;
+            line-height: 1.7;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* MESSAGES */
+
+        .messages {
+            margin-bottom: 20px;
         }
 
         .message {
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 15px;
+            padding: 14px 17px;
+            margin-bottom: 10px;
+            border-radius: 10px;
             background: #dcfce7;
             color: #166534;
+            font-size: 13px;
+            border: 1px solid #bbf7d0;
+        }
+
+        .message.error {
+            background: #fee2e2;
+            color: #991b1b;
+            border-color: #fecaca;
         }
 
         .errorlist {
             color: #dc2626;
+            font-size: 12px;
+            margin-top: 6px;
+            padding-left: 18px;
         }
 
+        /* CARD */
+
+        .card {
+            background: white;
+            border: 1px solid #edf0f7;
+            border-radius: 17px;
+            padding: 28px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(40,36,92,0.04);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 25px;
+        }
+
+        .card-icon {
+            width: 47px;
+            height: 47px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 13px;
+            background: #ede9fe;
+            font-size: 22px;
+        }
+
+        .card-header h2 {
+            font-size: 18px;
+            color: #28245c;
+            margin-bottom: 5px;
+        }
+
+        .card-header p {
+            color: #9290a7;
+            font-size: 12px;
+        }
+
+        /* FORM */
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 22px;
+        }
+
+        .form-group {
+            min-width: 0;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 9px;
+            color: #334155;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        select,
+        input {
+            width: 100%;
+            padding: 13px 14px;
+            border: 1px solid #dfe2ed;
+            border-radius: 10px;
+            background: #fbfbfe;
+            color: #252344;
+            font-size: 13px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        select:focus,
+        input:focus {
+            border-color: #5942a9;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(89,66,169,0.10);
+        }
+
+        select {
+            cursor: pointer;
+        }
+
+        .form-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 27px;
+            flex-wrap: wrap;
+        }
+
+        .save-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 13px 22px;
+            background: linear-gradient(120deg, #5145b8, #7455c7);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .save-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 16px rgba(81,69,184,0.2);
+        }
+
+        .cancel-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 13px 20px;
+            background: #f1f5f9;
+            color: #475569;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 700;
+            transition: 0.3s;
+        }
+
+        .cancel-btn:hover {
+            background: #e2e8f0;
+        }
+
+        /* TABLE */
+
         .table-container {
+            width: 100%;
             overflow-x: auto;
+            border-radius: 12px;
+            border: 1px solid #edf0f7;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 15px;
-        }
-
-        th, td {
-            padding: 12px;
-            border: 1px solid #ddd;
-            text-align: left;
+            min-width: 600px;
         }
 
         th {
-            background: #2563eb;
-            color: white;
+            background: #f0edff;
+            color: #5942a9;
+            padding: 16px;
+            font-size: 12px;
+            font-weight: 700;
+            text-align: left;
+            white-space: nowrap;
         }
 
-        tbody tr:nth-child(even) {
+        td {
+            padding: 16px;
+            color: #475569;
+            font-size: 13px;
+            border-bottom: 1px solid #f0eff7;
+        }
+
+        tbody tr:hover {
+            background: #faf9ff;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .id-badge {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 20px;
             background: #f1f5f9;
+            color: #475569;
+            font-size: 11px;
+            font-weight: 700;
         }
 
-        @media (max-width: 500px) {
-            .card {
-                padding: 18px;
+        .dept-badge {
+            display: inline-block;
+            padding: 6px 11px;
+            border-radius: 20px;
+            background: #ede9fe;
+            color: #6d28d9;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .subject-badge {
+            display: inline-block;
+            padding: 6px 11px;
+            border-radius: 20px;
+            background: #dbeafe;
+            color: #1d4ed8;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        /* EMPTY STATE */
+
+        .empty {
+            padding: 35px 20px;
+            text-align: center;
+            color: #9290a7;
+            background: #f8f7ff;
+            border: 1px dashed #d8d1f5;
+            border-radius: 12px;
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        .empty-icon {
+            font-size: 35px;
+            margin-bottom: 10px;
+        }
+
+        /* FOOTER */
+
+        footer {
+            text-align: center;
+            padding: 22px 0 5px;
+            color: #aaa8bb;
+            font-size: 12px;
+            border-top: 1px solid #e8e7ef;
+            margin-top: 25px;
+        }
+
+        /* RESPONSIVE */
+
+        @media(max-width: 900px) {
+
+            .main-content {
+                padding: 25px;
             }
 
-            .save-btn, .back-btn {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full {
+                grid-column: auto;
+            }
+        }
+
+        @media(max-width: 650px) {
+
+            .layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                position: relative;
                 width: 100%;
-                text-align: center;
+                height: auto;
+                padding: 20px;
+            }
+
+            .logo {
+                padding-bottom: 20px;
+            }
+
+            .sidebar nav {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 5px;
+            }
+
+            .nav-link {
+                margin: 0;
+                padding: 11px 8px;
+                font-size: 12px;
+            }
+
+            .sidebar-bottom {
+                margin-top: 20px;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 20px 15px;
+            }
+
+            .topbar {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .welcome {
+                padding: 24px 20px;
+            }
+
+            .welcome h2 {
+                font-size: 20px;
+            }
+
+            .welcome::after {
+                right: 10px;
+                font-size: 60px;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .form-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .save-btn,
+            .cancel-btn {
+                width: 100%;
             }
         }
+
     </style>
 </head>
 
 <body>
 
-<div class="container">
+<div class="layout">
 
-    <div class="card">
+    <!-- SIDEBAR -->
 
-        <h1>Year Subject Mapping</h1>
+    <aside class="sidebar">
 
-        <p>
-            Select a department, academic year and subject
-            to create a mapping.
-        </p>
+        <div class="logo">
+            Campus<span>Flow.</span>
+        </div>
 
-        {% if messages %}
-            {% for message in messages %}
-                <div class="message">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        {% endif %}
+        <p class="menu-title">STAFF WORKSPACE</p>
 
-        <form method="POST">
-            {% csrf_token %}
+        <nav>
 
-            {{ form.non_field_errors }}
-
-            <label for="{{ form.department.id_for_label }}">
-                Department
-            </label>
-            {{ form.department }}
-            {{ form.department.errors }}
-
-            <label for="{{ form.year.id_for_label }}">
-                Academic Year
-            </label>
-            {{ form.year }}
-            {{ form.year.errors }}
-
-            <label for="{{ form.subject.id_for_label }}">
-                Subject
-            </label>
-            {{ form.subject }}
-            {{ form.subject.errors }}
-
-            <button type="submit" class="save-btn">
-                Save Mapping
-            </button>
-
-            <a href="{% url 'staff_dashboard' %}" class="back-btn">
-                Back to Dashboard
+            <a href="{% url 'staff_dashboard' %}" class="nav-link">
+                <span>📊</span> Dashboard
             </a>
-        </form>
 
-    </div>
+            <a href="#" class="nav-link active">
+                <span>📚</span> Year Subject Mapping
+            </a>
 
-    <div class="card">
+        </nav>
 
-        <h2>Saved Year Subject Mappings</h2>
+        <div class="sidebar-bottom">
 
-        {% if mappings %}
+            <div class="profile">
 
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Department</th>
-                            <th>Academic Year</th>
-                            <th>Subject</th>
-                        </tr>
-                    </thead>
+                <div class="avatar">
+                    📖
+                </div>
 
-                    <tbody>
-                        {% for mapping in mappings %}
-                            <tr>
-                                <td>{{ mapping.id }}</td>
-                                <td>{{ mapping.department|default:"Not assigned" }}</td>
-                                <td>{{ mapping.year }}</td>
-                                <td>{{ mapping.subject }}</td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+                <div>
+                    <p>Academic Management</p>
+                    <small>Staff Workspace</small>
+                </div>
+
             </div>
 
-        {% else %}
+        </div>
 
-            <p>No mappings have been added yet.</p>
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+
+    <main class="main-content">
+
+        <!-- HEADER -->
+
+        <header class="topbar">
+
+            <div>
+                <h1>Year Subject Mapping</h1>
+                <p>Manage department-wise academic year subject assignments.</p>
+            </div>
+
+            <a href="{% url 'staff_dashboard' %}" class="back-btn">
+                ← Back to Dashboard
+            </a>
+
+        </header>
+
+
+        <!-- WELCOME BANNER -->
+
+        <section class="welcome">
+
+            <h2>Academic Subject Management 🎓</h2>
+
+            <p>
+                Assign subjects to specific departments and academic years.
+                Manage all subject mappings from one place.
+            </p>
+
+        </section>
+
+
+        <!-- DJANGO MESSAGES -->
+
+        {% if messages %}
+
+            <div class="messages">
+
+                {% for message in messages %}
+
+                    <div class="message {% if message.tags == 'error' %}error{% endif %}">
+                        {{ message }}
+                    </div>
+
+                {% endfor %}
+
+            </div>
 
         {% endif %}
 
-    </div>
+
+        <!-- ADD MAPPING FORM -->
+
+        <section class="card">
+
+            <div class="card-header">
+
+                <div class="card-icon">➕</div>
+
+                <div>
+                    <h2>Create New Mapping</h2>
+                    <p>Select department, academic year and subject.</p>
+                </div>
+
+            </div>
+
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+                {{ form.non_field_errors }}
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+
+                        <label for="{{ form.department.id_for_label }}">
+                            🏢 Department
+                        </label>
+
+                        {{ form.department }}
+
+                        {{ form.department.errors }}
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="{{ form.year.id_for_label }}">
+                            🎓 Academic Year
+                        </label>
+
+                        {{ form.year }}
+
+                        {{ form.year.errors }}
+
+                    </div>
+
+
+                    <div class="form-group full">
+
+                        <label for="{{ form.subject.id_for_label }}">
+                            📚 Subject
+                        </label>
+
+                        {{ form.subject }}
+
+                        {{ form.subject.errors }}
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-actions">
+
+                    <button type="submit" class="save-btn">
+                        💾 Save Mapping
+                    </button>
+
+                    <a href="{% url 'staff_dashboard' %}" class="cancel-btn">
+                        Cancel
+                    </a>
+
+                </div>
+
+            </form>
+
+        </section>
+
+
+        <!-- SAVED MAPPINGS -->
+
+        <section class="card">
+
+            <div class="card-header">
+
+                <div class="card-icon">📋</div>
+
+                <div>
+                    <h2>Saved Year Subject Mappings</h2>
+                    <p>View all department-wise subject assignments.</p>
+                </div>
+
+            </div>
+
+
+            {% if mappings %}
+
+                <div class="table-container">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+                                <th>Mapping ID</th>
+                                <th>Department</th>
+                                <th>Academic Year</th>
+                                <th>Subject</th>
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            {% for mapping in mappings %}
+
+                                <tr>
+
+                                    <td>
+                                        <span class="id-badge">
+                                            #{{ mapping.id }}
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        <span class="dept-badge">
+                                            {{ mapping.department|default:"Not assigned" }}
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        {{ mapping.year }}
+                                    </td>
+
+                                    <td>
+                                        <span class="subject-badge">
+                                            {{ mapping.subject }}
+                                        </span>
+                                    </td>
+
+                                </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            {% else %}
+
+                <div class="empty">
+
+                    <div class="empty-icon">📚</div>
+
+                    <strong>No Subject Mappings Found</strong>
+
+                    <p>
+                        No mappings have been added yet.
+                        Create your first mapping using the form above.
+                    </p>
+
+                </div>
+
+            {% endif %}
+
+        </section>
+
+
+        <!-- FOOTER -->
+
+        <footer>
+            © 2026 CampusFlow LMS | Academic Management
+        </footer>
+
+    </main>
 
 </div>
 
